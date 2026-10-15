@@ -60,6 +60,34 @@
 <div class="card"><h3>Flags emergencies</h3><p>No heat, burst pipe, sparking panel? You get a text alert within moments.</p></div>
 </div></div></section>
 
+<section class="stats" id="missed-calls"><div class="wrap">
+<h2>What missed calls cost the trades</h2>
+<p class="sub">Published research shows how many calls go unanswered, and when they come in.</p>
+<div class="cards">
+<div class="card stat"><span class="big">48%</span><p>of calls to home-services businesses didn't reach a person. Invoca found 52% were answered.</p><small class="src">Source: <a href="https://www.invoca.com/reports/the-invoca-home-services-lead-conversion-benchmarks-report-2026" target="_blank" rel="noopener">Invoca, Home Services Lead Conversion Benchmarks Report</a>, July 2026</small></div>
+<div class="card stat"><span class="big">1 in 8</span><p>calls to trades businesses come in after hours or on weekends (10.7% to 12.1%).</p><small class="src">Source: <a href="https://www.servicetitan.com/guides/call-trends-in-the-trades" target="_blank" rel="noopener">ServiceTitan, Call Trends in the Trades</a>, May 2025 to July 2026 data</small></div>
+<div class="card stat"><span class="big">9%</span><p>of calls to small trade shops got booked after 6 p.m., compared with 26% at peak hours.</p><small class="src">Source: <a href="https://www.servicetitan.com/blog/data-call-booking-rates" target="_blank" rel="noopener">ServiceTitan call booking data</a>, Oct 2022 (3,000+ businesses)</small></div>
+<div class="card stat"><span class="big">62%</span><p>of calls to small businesses weren't answered live: 37.8% went to voicemail and 24.3% got no response.</p><small class="src">Source: <a href="https://411locals.us/small-business-owners-dont-answer-62-of-phone-calls/" target="_blank" rel="noopener">411 Locals study</a>, Jan 2016 (85 businesses, 30 days)</small></div>
+</div>
+<div class="roi">
+<div><h3>Can it pay for itself?</h3>
+<p><strong>Illustration only:</strong> say one call Sami answers after hours turns into a $300 repair. That one job covers the Pro plan ($149/mo) about twice over. Sami answers every call it receives, 24/7, so more of those callers reach someone instead of voicemail. Your results depend on your call volume, prices and close rate.</p></div>
+<form class="calc" onsubmit="return false" aria-label="Missed call calculator">
+<label>Calls missed per week<input id="c-miss" type="number" min="0" value="5"></label>
+<label>Average job value ($)<input id="c-val" type="number" min="0" value="300"></label>
+<label>Close rate (%)<input id="c-rate" type="number" min="0" max="100" value="40"></label>
+<p class="full calc-out" id="c-out" aria-live="polite"></p>
+<p class="full note">Estimate only, not a guarantee. Close rate is the share of answered calls that turn into booked jobs. For reference, ServiceTitan reported a typical booking rate of 42% in June 2022.</p>
+</form>
+</div>
+<script>
+(function(){var f=function(i){return Math.max(0,parseFloat(document.getElementById(i).value)||0)};
+function u(){var m=f('c-miss')*52/12*f('c-val')*Math.min(f('c-rate'),100)/100,fmt=function(n){return '$'+Math.round(n).toLocaleString()};
+document.getElementById('c-out').innerHTML='Estimated value of those calls: <strong>'+fmt(m)+'/month</strong>. Compare with Sami Pro at $149/month'+(m>149?' (about '+(m/149).toFixed(1)+'× the plan price).':'.');}
+['c-miss','c-val','c-rate'].forEach(function(i){document.getElementById(i).addEventListener('input',u)});u();})();
+</script>
+</div></section>
+
 <section class="alt" id="how"><div class="wrap">
 <h2>How it works: we do it for you</h2>
 <p class="sub">No dashboards, no software to learn. Answer a few questions and we handle the rest.</p>
