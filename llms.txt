@@ -5,7 +5,7 @@
 - Answers inbound calls and texts 24/7, books appointments (Google Calendar; Jobber planned), answers FAQs, flags emergencies and texts the owner a summary.
 - Inbound only: never makes outbound sales calls or robocalls.
 - Every call opens with a recording notice (all-party-consent compliance).
-- Setup is done for the contractor in 24-48 hours; they forward calls to their Callbassador number.
+- Setup is done for the business, usually within 24-48 hours; they forward calls to their Callbassador number.
 
 ## Pricing (USD/month)
 - Starter $79: 150 minutes
