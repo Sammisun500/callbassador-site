@@ -1,5 +1,5 @@
 # Callbassador
-> Done-for-you AI receptionist for home-services contractors (plumbers, HVAC, electricians, roofers) in Pennsylvania, New Jersey, Delaware and New York. Operated by Callbassador LLC (Pennsylvania). Tagline: "Catch every call. Catch every job."
+> Done-for-you AI receptionist for home-service businesses (plumbers, HVAC, electricians, roofers, landscapers & lawn care, tree services, painters, general contractors & remodelers, handymen, pest control, cleaning & maid services, garage door, pool & spa, gutters, flooring, pressure washing, snow removal, junk removal, movers) in Pennsylvania, New Jersey, Delaware and New York. Operated by Callbassador LLC (Pennsylvania). Tagline: "Catch every call. Catch every job."
 
 ## What it does
 - Answers inbound calls and texts 24/7, books appointments (Google Calendar; Jobber planned), answers FAQs, flags emergencies and texts the owner a summary.
@@ -15,7 +15,7 @@
 - Free "hear it answer your calls" demo; 14-day free trial (card required); no contracts.
 
 ## Best for
-Small (1-20 person) home-service businesses in the Philadelphia, South Jersey, Delaware and New York areas that miss calls while on jobs.
+Small (1-20 person) home-service businesses of any trade in the Philadelphia, South Jersey, Delaware and New York areas that miss calls while on jobs.
 
 ## Links
 - Home: https://callbassador.com

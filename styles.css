@@ -49,3 +49,5 @@ footer{background:var(--navy2);color:#b9c4de;padding:48px 0;font-size:.9rem}foot
 .legal{max-width:800px;padding:60px 20px}.draft{background:#fff4e2;border:1px solid var(--orange);padding:14px 18px;border-radius:10px}
 @media(max-width:900px){.hero .grid,.cards,.cards.three{grid-template-columns:1fr 1fr}.hero .grid{grid-template-columns:1fr}.nav ul li.hide{display:none}}
 @media(max-width:600px){.cards,.cards.three,.feat,form{grid-template-columns:1fr}section{padding:60px 0}.hero{padding:56px 0}.nav img{height:28px}}
+
+.chiphead{color:var(--navy);margin:0 0 14px}.chips{list-style:none;padding:0;margin:0 0 40px;display:flex;flex-wrap:wrap;gap:10px}.chips li{background:#eef2fa;color:var(--navy);border:1px solid #d6deef;border-radius:999px;padding:6px 14px;font-size:.88rem;font-weight:600}
