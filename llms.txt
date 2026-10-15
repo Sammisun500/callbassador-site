@@ -1,0 +1,24 @@
+# Callbassador
+> Done-for-you AI receptionist for home-services contractors (plumbers, HVAC, electricians, roofers) in Pennsylvania, New Jersey, Delaware and New York. Operated by Callbassador LLC (Pennsylvania). Tagline: "Catch every call. Catch every job."
+
+## What it does
+- Answers inbound calls and texts 24/7, books appointments (Google Calendar; Jobber planned), answers FAQs, flags emergencies and texts the owner a summary.
+- Inbound only: never makes outbound sales calls or robocalls.
+- Every call opens with a recording notice (all-party-consent compliance).
+- Setup is done for the contractor in 24-48 hours; they forward calls to their Callbassador number.
+
+## Pricing (USD/month)
+- Starter $79: 150 minutes
+- Pro $149: 400 minutes + booking
+- Crew $249: 800 minutes
+- Founding 10 offer: Pro at $99/mo locked 12 months
+- Free "hear it answer your calls" demo; 14-day free trial (card required); no contracts.
+
+## Best for
+Small (1-20 person) home-service businesses in the Philadelphia, South Jersey, Delaware and New York areas that miss calls while on jobs.
+
+## Links
+- Home: https://callbassador.com
+- Free demo: https://callbassador.com/#demo
+- Pricing: https://callbassador.com/#pricing
+- Contact: hello@callbassador.com
