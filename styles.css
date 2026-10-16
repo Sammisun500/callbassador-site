@@ -61,3 +61,4 @@ footer{background:var(--navy2);color:#b9c4de;padding:48px 0;font-size:.9rem}foot
 .sms{background:var(--navy);color:#fff;border-radius:20px;padding:22px}.sms p{margin:8px 0;color:#e6ebf5}.sms .note{color:#b9c4de;font-size:.8rem}.sms .tag{font-size:.75rem;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:.08em}
 .card.best{border:2px solid var(--orange)}.card.best .btn{margin-top:14px}
 @media(max-width:900px){.excall{grid-template-columns:1fr}}
+.hero h2{color:#fff;font-size:1.35rem;margin:1.6em 0 .4em}
