@@ -2,7 +2,7 @@
 > Done-for-you AI receptionist for home-service businesses (plumbers, HVAC, electricians, roofers, landscapers & lawn care, tree services, painters, general contractors & remodelers, handymen, pest control, cleaning & maid services, garage door, pool & spa, gutters, flooring, pressure washing, snow removal, junk removal, movers) in Pennsylvania, New Jersey, Delaware and New York. Operated by Callbassador LLC, 64 E Uwchlan Ave, Suite 241, Exton, PA 19341. Tagline: "Catch every call. Catch every job."
 
 ## What it does
-- Answers inbound calls and texts 24/7, books appointments (Google Calendar; Jobber planned), answers FAQs, flags emergencies and texts the owner a summary.
+- Answers inbound calls and texts 24/7, answers FAQs, flags emergencies, takes the caller's details and texts the owner a summary. Appointment booking (Google Calendar; Jobber planned) is on Pro and Crew plans only.
 - Inbound only: never makes outbound sales calls or robocalls.
 - Every call opens with a recording notice (all-party-consent compliance).
 - Setup is done for the business, usually within 24-48 hours; they forward calls to their Callbassador number.
@@ -19,6 +19,7 @@ Small (1-20 person) home-service businesses of any trade in Pennsylvania, New Je
 
 ## Links
 - Home: https://callbassador.com
-- Free demo: https://callbassador.com/#demo
+- Free demo request (demo line in your business name): https://callbassador.com/#demo
+- Live demo (talk to Sami in the browser): https://agent.retellai.com/orb/agent_03ff2fb3cce591ca9e0b5a4ba6?token=69725cead0997e383d7bf9abd3e8fc0b
 - Pricing: https://callbassador.com/#pricing
 - Contact: hello@callbassador.com
