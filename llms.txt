@@ -11,15 +11,15 @@
 - Starter $79: 150 minutes
 - Pro $149: 400 minutes + booking
 - Crew $249: 800 minutes
-- November Special (November Onboarding): Grab one of 10 onboarding spots for November (white-glove custom setup capped at 10 new shops/month) — Pro at $99/mo locked for 12 months (normally $149/mo); starts Monday, Nov 2, 2026 (early access for invited contractors now; 10 of 10 spots open). Free setup, 14-day trial, cancel anytime. Waitlist: https://callbassador.com/#pricing
-- Free "hear it answer your calls" demo; 14-day free trial (card required); no contracts.
+- November Special (November Onboarding): Grab one of 10 onboarding spots for November now (white-glove custom setup capped at 10 new shops/month; 10 of 10 November onboarding spots open) — Pro at $99/mo locked for 12 months (normally $149/mo). 14-day free trial, free custom setup, no credit card required to start, cancel anytime. Start 14-day free trial: https://callbassador.com/#demo
+- 14-day free trial + free custom setup (no credit card required to start) and free live custom demo; no contracts.
 
 ## Best for
 Small (1-20 person) home-service businesses of any trade across the United States that miss calls while on jobs.
 
 ## Links
 - Home: https://callbassador.com
-- Free demo request (demo line in your business name): https://callbassador.com/#demo
+- Start 14-day free trial / custom demo request (demo line in your business name): https://callbassador.com/#demo
 - Live demo (talk to Sami in the browser): https://agent.retellai.com/orb/agent_03ff2fb3cce591ca9e0b5a4ba6?token=69725cead0997e383d7bf9abd3e8fc0b
 - Pricing: https://callbassador.com/#pricing
 - Contact: hello@callbassador.com
