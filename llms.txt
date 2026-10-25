@@ -20,7 +20,7 @@ Small (1-20 person) home-service businesses of any trade across the United State
 ## Links
 - Home: https://callbassador.com
 - Start 14-day free trial / custom demo request (demo line in your business name): https://callbassador.com/#demo
-- Live demo (talk to Sami in the browser): https://agent.retellai.com/orb/agent_03ff2fb3cce591ca9e0b5a4ba6?token=69725cead0997e383d7bf9abd3e8fc0b
+- Live demo (talk to Sami in the browser): https://callbassador.com/?talk=1
 - Pricing: https://callbassador.com/#pricing
 - Contact: hello@callbassador.com
 - Cleaning companies & maid services page: https://callbassador.com/answering-service/cleaning-companies.html
