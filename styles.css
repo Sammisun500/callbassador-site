@@ -71,6 +71,10 @@ footer{background:var(--navy2);color:#b9c4de;padding:48px 0;font-size:.9rem}foot
 .hero .note a{color:inherit;text-decoration:underline}
 
 
+
+
+
+
 /*trustbar-css-start*/
 .trustbar{background:#f0f4fb;border-bottom:1px solid #dce3f0;padding:22px 0}
 .trustbar.compact{padding:18px 0}
@@ -85,6 +89,15 @@ footer{background:var(--navy2);color:#b9c4de;padding:48px 0;font-size:.9rem}foot
 .demo-trust .tbadge strong{color:#fff}
 .demo-trust .tbadge span{color:#c9d2e8}
 .hub-trust{margin:22px 0}
+.step-badge{display:inline-block;background:rgba(240,154,46,.18);border:1px solid rgba(240,154,46,.55);color:var(--orange);font-size:.82rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;padding:5px 14px;border-radius:999px;margin-bottom:14px}
+.onb-hero{padding:60px 0 64px}
+.onb-form textarea{width:100%;margin-top:6px;padding:12px;border:1px solid #c8d0e0;border-radius:10px;font:inherit;resize:vertical}
+.onb-sec-head h2{font-size:1.35rem;margin:0 0 4px;color:var(--navy)}
+.onb-sec-head p{margin:0;color:var(--muted);font-size:.92rem}
+.onb-prefill{background:#ecfdf5;border:1px solid #10b981;color:#065f46;padding:12px 16px;border-radius:10px;font-weight:600;font-size:.92rem}
+.onb-fastpass{background:#fff9eb;border:2px solid var(--orange);padding:16px 18px;border-radius:12px}
+.fastpass-tag{display:inline-block;background:var(--orange);color:var(--navy2);font-size:.74rem;font-weight:700;text-transform:uppercase;padding:2px 9px;border-radius:999px;margin-right:6px;vertical-align:middle}
+.field-hint{display:block;font-weight:400;font-size:.82rem;color:var(--muted);margin-top:6px}
 @media(max-width:1024px){.trust-grid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:680px){.trust-grid{grid-template-columns:1fr}.tbadge{padding:11px 12px}}
 /*trustbar-css-end*/
@@ -131,6 +144,7 @@ footer{background:var(--navy2);color:#b9c4de;padding:48px 0;font-size:.9rem}foot
 .cb-icon-spin svg{animation:cbOrbSpin .85s linear infinite}
 .cb-vmodal-foot{margin-top:12px;padding-top:14px;border-top:1px solid rgba(255,255,255,.12);font-size:.8rem;color:#b9c4de}
 .cb-vmodal-foot a{color:#F59E0B;font-weight:600;text-decoration:underline}
+.cb-vmodal-trial{margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.1);font-size:.86rem;color:#fff}
 @keyframes cbOrbSpin{to{transform:rotate(360deg)}}
 @keyframes cbOrbPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.55;transform:scale(1.05)}}
 @keyframes cbOrbBreath{0%,100%{transform:scale(1);opacity:.68}50%{transform:scale(1.08);opacity:.9}}

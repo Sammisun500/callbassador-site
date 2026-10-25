@@ -20,6 +20,7 @@ Small (1-20 person) home-service businesses of any trade across the United State
 ## Links
 - Home: https://callbassador.com
 - Start 14-day free trial / custom demo request (demo line in your business name): https://callbassador.com/#demo
+- Custom Sami onboarding questionnaire (Step 2 setup): https://callbassador.com/onboarding.html
 - Live demo (talk to Sami in the browser): https://callbassador.com/?talk=1
 - Pricing: https://callbassador.com/#pricing
 - Contact: hello@callbassador.com
