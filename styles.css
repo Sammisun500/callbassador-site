@@ -70,6 +70,7 @@ footer{background:var(--navy2);color:#b9c4de;padding:48px 0;font-size:.9rem}foot
 .arealinks{columns:2 240px;padding-left:18px;margin:12px 0}.arealinks li{margin:4px 0;break-inside:avoid}
 .hero .note a{color:inherit;text-decoration:underline}
 
+
 /*trustbar-css-start*/
 .trustbar{background:#f0f4fb;border-bottom:1px solid #dce3f0;padding:22px 0}
 .trustbar.compact{padding:18px 0}
