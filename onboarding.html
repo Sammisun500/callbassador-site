@@ -33,7 +33,7 @@
 <label>Mobile phone (for urgent lead texts &amp; demo link) *<input name="phone" id="onb-phone" type="tel" required autocomplete="tel" placeholder="(610) 555-0147"></label>
 <label>Email *<input name="email" id="onb-email" type="email" required autocomplete="email" placeholder="mike@millerplumbing.com"></label>
 <label>Trade *<select name="trade" id="onb-trade" required><option value="">Choose…</option><option value="Plumbing">Plumbing</option><option value="HVAC">HVAC</option><option value="Electrical">Electrical</option><option value="Roofing">Roofing</option><option value="Landscaping">Landscaping</option><option value="General contracting">General contracting</option><option value="Cleaning / maid / janitorial">Cleaning / maid / janitorial</option><option value="Other home services">Other home services</option></select></label>
-<label>Plan<select name="plan" id="onb-plan"><option value="Pro — $99/mo November Special (14-day free trial)" selected>Pro — $99/mo November Special (14-day free trial)</option><option value="Starter — $79/mo (14-day free trial)">Starter — $79/mo (14-day free trial)</option><option value="Crew — $249/mo (14-day free trial)">Crew — $249/mo (14-day free trial)</option><option value="Just hear a free custom demo first">Just hear a free custom demo first</option></select></label>
+<label>Plan<select name="plan" id="onb-plan"><option value="Pro — $99/mo (November Special · 250 min, 24/7)" selected>Pro — $99/mo (November Special · 250 min, 24/7)</option><option value="Starter — $79/mo (14-day free trial)">Starter — $79/mo (14-day free trial)</option><option value="Growth — $249/mo (14-day free trial)">Growth — $249/mo (14-day free trial)</option><option value="Starter — $49/mo (14-day free trial)">Starter — $49/mo (14-day free trial)</option><option value="Growth — $199/mo (14-day free trial)">Growth — $199/mo (14-day free trial)</option><option value="Just hear a free custom demo first">Just hear a free custom demo first</option></select></label>
 
 <div class="full onb-sec-head" style="margin-top:12px">
   <h2>10 Quick Questions to Customize Your Sami</h2>
@@ -117,10 +117,12 @@
   } catch(e) {}
   try {
     var params = new URLSearchParams(window.location.search);
-    ['name','business','phone','email','trade','plan'].forEach(function(k){
+    ['name','business_name','business','phone','email','trade','plan'].forEach(function(k){
       if (params.get(k)) data[k] = params.get(k);
     });
   } catch(e) {}
+  if (data.business_name && !data.business) data.business = data.business_name;
+  if (data.business && !data.business_name) data.business_name = data.business;
   var filled = false;
   var map = {name:'onb-name', business:'onb-business', phone:'onb-phone', email:'onb-email', trade:'onb-trade', plan:'onb-plan'};
   Object.keys(map).forEach(function(k){
@@ -142,6 +144,14 @@
   if (filled) {
     var banner = document.getElementById('cb-prefill-banner');
     if (banner) banner.hidden = false;
+  }
+  var onbForm = document.getElementById('cb-onboarding-form');
+  if (onbForm) {
+    onbForm.addEventListener('submit', function(){
+      if (typeof window.fbq === 'function') {
+        try { window.fbq('trackCustom', 'CompleteOnboarding'); } catch(e) {}
+      }
+    });
   }
 })();
 </script>
@@ -188,7 +198,7 @@
       </button>
     </div>
     <div class="cb-vmodal-foot">
-      <div class="cb-vmodal-trial">Want Sami answering for your business? <a href="#demo" data-cb-trial="1">Start your 14-day free trial &rarr;</a></div>
+      <div class="cb-vmodal-trial">Want Sami answering for your business? <a href="#demo" data-cb-trial="1" data-cta-loc="voice_modal">Start your 14-day free trial &rarr;</a></div>
       <div>Prefer to test from your phone? Call <a href="tel:+16102711725">(610) 271-1725</a> · Powered by Callbassador</div>
     </div>
   </div>
@@ -521,7 +531,7 @@
       closeModal();
       return;
     }
-    var tr = t && t.closest ? t.closest('[data-cb-trial="1"]') : null;
+    var tr = t && t.closest ? t.closest('[data-cb-trial="1" data-cta-loc="voice_modal"]') : null;
     if (tr) {
       e.preventDefault();
       closeModal();
@@ -562,4 +572,181 @@
 })();
 </script>
 <!--voice-modal-end-->
+<!--cb-conversion-bar-start-->
+<audio id="cb-sample-audio" preload="none" src="assets/sami-sample-call.mp3" hidden></audio>
+<div id="cb-sticky-cta" class="cb-sticky-cta" role="region" aria-label="Quick actions" data-step2-page="1">
+  <button type="button" class="cb-sticky-play" id="cb-sticky-play-btn" data-cb-audio-toggle="1">&#9654; Hear 22s Call</button>
+  <a class="cb-sticky-trial" id="cb-sticky-trial-btn" href="#demo" data-cta-loc="sticky_mobile_bar">Start 14-Day Free Trial &rarr;</a>
+</div>
+<script>
+(function(){
+  var audio = document.getElementById('cb-sample-audio');
+  var playBtn = document.getElementById('cb-play-sample-btn');
+  var playLabel = document.getElementById('cb-play-label');
+  var stickyPlayBtn = document.getElementById('cb-sticky-play-btn');
+  var progressEl = document.getElementById('cb-audio-progress');
+  var trackEl = document.getElementById('cb-audio-track');
+  var timerEl = document.getElementById('cb-audio-timer');
+  var stickyBar = document.getElementById('cb-sticky-cta');
+  var TOTAL_FALLBACK = 22;
+
+  function fmtTime(sec) {
+    sec = Math.max(0, Math.round(sec || 0));
+    var m = Math.floor(sec / 60);
+    var s = sec % 60;
+    return m + ':' + (s < 10 ? '0' : '') + s;
+  }
+
+  function getDuration() {
+    if (audio && audio.duration && isFinite(audio.duration) && audio.duration > 0) {
+      return audio.duration;
+    }
+    return TOTAL_FALLBACK;
+  }
+
+  function syncAudioUI(isPlaying) {
+    if (playBtn) playBtn.setAttribute('data-playing', isPlaying ? '1' : '0');
+    if (playLabel) {
+      playLabel.textContent = isPlaying
+        ? '⏸ Playing real call...'
+        : '▶ Hear a Real 22-Sec Emergency Call (No Mic Needed)';
+    }
+    if (stickyPlayBtn) {
+      stickyPlayBtn.setAttribute('data-playing', isPlaying ? '1' : '0');
+      stickyPlayBtn.textContent = isPlaying ? '⏸ Playing...' : '▶ Hear 22s Call';
+    }
+  }
+
+  function updateProgress() {
+    if (!audio) return;
+    var dur = getDuration();
+    var cur = audio.currentTime || 0;
+    var pct = Math.min(100, Math.max(0, (cur / dur) * 100));
+    if (progressEl) progressEl.style.width = pct.toFixed(1) + '%';
+    if (trackEl) trackEl.setAttribute('aria-valuenow', String(Math.round(cur)));
+    if (timerEl) timerEl.textContent = fmtTime(cur) + ' / ' + fmtTime(dur);
+  }
+
+  function toggleSampleAudio() {
+    if (!audio) return;
+    if (audio.paused) {
+      var p = audio.play();
+      syncAudioUI(true);
+      if (typeof window.fbq === 'function') {
+        try { window.fbq('trackCustom', 'PlaySampleAudio'); } catch(e) {}
+      }
+      if (p && typeof p.catch === 'function') {
+        p.catch(function() { syncAudioUI(false); });
+      }
+    } else {
+      audio.pause();
+      syncAudioUI(false);
+    }
+  }
+
+  if (audio) {
+    audio.addEventListener('play', function() { syncAudioUI(true); });
+    audio.addEventListener('pause', function() { syncAudioUI(false); });
+    audio.addEventListener('ended', function() {
+      audio.currentTime = 0;
+      syncAudioUI(false);
+      updateProgress();
+    });
+    audio.addEventListener('timeupdate', updateProgress);
+    audio.addEventListener('loadedmetadata', updateProgress);
+  }
+
+  if (trackEl && audio) {
+    trackEl.addEventListener('click', function(e) {
+      var rect = trackEl.getBoundingClientRect();
+      if (!rect.width) return;
+      var ratio = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
+      audio.currentTime = ratio * getDuration();
+      updateProgress();
+    });
+  }
+
+  document.addEventListener('click', function(e) {
+    var toggle = e.target && e.target.closest ? e.target.closest('[data-cb-audio-toggle="1"]') : null;
+    if (toggle) {
+      e.preventDefault();
+      toggleSampleAudio();
+      return;
+    }
+    var talkTrigger = e.target && e.target.closest ? e.target.closest('[data-talk-sami]') : null;
+    if (talkTrigger && audio && !audio.paused) {
+      audio.pause();
+    }
+  });
+
+  // Explicit ClickStartTrialCTA tracking + smooth scroll & input focus
+  function detectCtaLocation(el) {
+    var explicit = el.getAttribute('data-cta-loc');
+    if (explicit) return explicit;
+    if (el.closest('#cb-sticky-cta')) return 'sticky_mobile_bar';
+    if (el.closest('#cb-voice-modal')) return 'voice_modal';
+    if (el.closest('.hero-card')) return 'hero_card';
+    if (el.closest('header')) return 'nav';
+    if (el.closest('.hero')) return 'hero';
+    if (el.closest('#pricing')) return 'pricing';
+    if (el.closest('#compare')) return 'compare_card';
+    return 'mid_page_banner';
+  }
+
+  document.addEventListener('click', function(e) {
+    var link = e.target && e.target.closest ? e.target.closest('a[href*="#demo"], [data-cta-loc], [data-cb-trial="1"]') : null;
+    if (!link) return;
+    var loc = detectCtaLocation(link);
+    if (typeof window.fbq === 'function') {
+      try { window.fbq('trackCustom', 'ClickStartTrialCTA', { location: loc }); } catch(err) {}
+    }
+    var href = link.getAttribute('href') || '';
+    if (href === '#demo' || link.getAttribute('data-cb-trial') === '1') {
+      var demoSec = document.getElementById('demo');
+      if (demoSec) {
+        e.preventDefault();
+        try { demoSec.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch(err) { window.location.hash = '#demo'; }
+        setTimeout(function() {
+          var firstInp = demoSec.querySelector('input[name="name"]');
+          if (firstInp) {
+            try { firstInp.focus({ preventScroll: true }); } catch(err) { firstInp.focus(); }
+          }
+        }, 300);
+      }
+    }
+  });
+
+  // Sticky Mobile Bar auto-hide when #demo is in viewport or #cb-voice-modal is open
+  if (stickyBar) {
+    var demoInView = false;
+    var modalOpen = false;
+    function syncStickyVisibility() {
+      if (demoInView || modalOpen) {
+        stickyBar.classList.add('is-hidden');
+      } else {
+        stickyBar.classList.remove('is-hidden');
+      }
+    }
+    var demoTarget = document.getElementById('demo');
+    if (demoTarget && typeof window.IntersectionObserver === 'function') {
+      var io = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          demoInView = entry.isIntersecting;
+        });
+        syncStickyVisibility();
+      }, { threshold: 0.08 });
+      io.observe(demoTarget);
+    }
+    var vModal = document.getElementById('cb-voice-modal');
+    if (vModal && typeof window.MutationObserver === 'function') {
+      var mo = new MutationObserver(function() {
+        modalOpen = vModal.classList.contains('is-open') || vModal.getAttribute('aria-hidden') === 'false';
+        syncStickyVisibility();
+      });
+      mo.observe(vModal, { attributes: true, attributeFilter: ['class', 'aria-hidden'] });
+    }
+  }
+})();
+</script>
+<!--cb-conversion-bar-end-->
 </body></html>

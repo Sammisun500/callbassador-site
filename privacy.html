@@ -53,7 +53,7 @@
       </button>
     </div>
     <div class="cb-vmodal-foot">
-      <div class="cb-vmodal-trial">Want Sami answering for your business? <a href="#demo" data-cb-trial="1">Start your 14-day free trial &rarr;</a></div>
+      <div class="cb-vmodal-trial">Want Sami answering for your business? <a href="#demo" data-cb-trial="1" data-cta-loc="voice_modal">Start your 14-day free trial &rarr;</a></div>
       <div>Prefer to test from your phone? Call <a href="tel:+16102711725">(610) 271-1725</a> · Powered by Callbassador</div>
     </div>
   </div>
@@ -386,7 +386,7 @@
       closeModal();
       return;
     }
-    var tr = t && t.closest ? t.closest('[data-cb-trial="1"]') : null;
+    var tr = t && t.closest ? t.closest('[data-cb-trial="1" data-cta-loc="voice_modal"]') : null;
     if (tr) {
       e.preventDefault();
       closeModal();
@@ -427,4 +427,181 @@
 })();
 </script>
 <!--voice-modal-end-->
+<!--cb-conversion-bar-start-->
+<audio id="cb-sample-audio" preload="none" src="assets/sami-sample-call.mp3" hidden></audio>
+<div id="cb-sticky-cta" class="cb-sticky-cta" role="region" aria-label="Quick actions">
+  <button type="button" class="cb-sticky-play" id="cb-sticky-play-btn" data-cb-audio-toggle="1">&#9654; Hear 22s Call</button>
+  <a class="cb-sticky-trial" id="cb-sticky-trial-btn" href="#demo" data-cta-loc="sticky_mobile_bar">Start 14-Day Free Trial &rarr;</a>
+</div>
+<script>
+(function(){
+  var audio = document.getElementById('cb-sample-audio');
+  var playBtn = document.getElementById('cb-play-sample-btn');
+  var playLabel = document.getElementById('cb-play-label');
+  var stickyPlayBtn = document.getElementById('cb-sticky-play-btn');
+  var progressEl = document.getElementById('cb-audio-progress');
+  var trackEl = document.getElementById('cb-audio-track');
+  var timerEl = document.getElementById('cb-audio-timer');
+  var stickyBar = document.getElementById('cb-sticky-cta');
+  var TOTAL_FALLBACK = 22;
+
+  function fmtTime(sec) {
+    sec = Math.max(0, Math.round(sec || 0));
+    var m = Math.floor(sec / 60);
+    var s = sec % 60;
+    return m + ':' + (s < 10 ? '0' : '') + s;
+  }
+
+  function getDuration() {
+    if (audio && audio.duration && isFinite(audio.duration) && audio.duration > 0) {
+      return audio.duration;
+    }
+    return TOTAL_FALLBACK;
+  }
+
+  function syncAudioUI(isPlaying) {
+    if (playBtn) playBtn.setAttribute('data-playing', isPlaying ? '1' : '0');
+    if (playLabel) {
+      playLabel.textContent = isPlaying
+        ? '⏸ Playing real call...'
+        : '▶ Hear a Real 22-Sec Emergency Call (No Mic Needed)';
+    }
+    if (stickyPlayBtn) {
+      stickyPlayBtn.setAttribute('data-playing', isPlaying ? '1' : '0');
+      stickyPlayBtn.textContent = isPlaying ? '⏸ Playing...' : '▶ Hear 22s Call';
+    }
+  }
+
+  function updateProgress() {
+    if (!audio) return;
+    var dur = getDuration();
+    var cur = audio.currentTime || 0;
+    var pct = Math.min(100, Math.max(0, (cur / dur) * 100));
+    if (progressEl) progressEl.style.width = pct.toFixed(1) + '%';
+    if (trackEl) trackEl.setAttribute('aria-valuenow', String(Math.round(cur)));
+    if (timerEl) timerEl.textContent = fmtTime(cur) + ' / ' + fmtTime(dur);
+  }
+
+  function toggleSampleAudio() {
+    if (!audio) return;
+    if (audio.paused) {
+      var p = audio.play();
+      syncAudioUI(true);
+      if (typeof window.fbq === 'function') {
+        try { window.fbq('trackCustom', 'PlaySampleAudio'); } catch(e) {}
+      }
+      if (p && typeof p.catch === 'function') {
+        p.catch(function() { syncAudioUI(false); });
+      }
+    } else {
+      audio.pause();
+      syncAudioUI(false);
+    }
+  }
+
+  if (audio) {
+    audio.addEventListener('play', function() { syncAudioUI(true); });
+    audio.addEventListener('pause', function() { syncAudioUI(false); });
+    audio.addEventListener('ended', function() {
+      audio.currentTime = 0;
+      syncAudioUI(false);
+      updateProgress();
+    });
+    audio.addEventListener('timeupdate', updateProgress);
+    audio.addEventListener('loadedmetadata', updateProgress);
+  }
+
+  if (trackEl && audio) {
+    trackEl.addEventListener('click', function(e) {
+      var rect = trackEl.getBoundingClientRect();
+      if (!rect.width) return;
+      var ratio = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
+      audio.currentTime = ratio * getDuration();
+      updateProgress();
+    });
+  }
+
+  document.addEventListener('click', function(e) {
+    var toggle = e.target && e.target.closest ? e.target.closest('[data-cb-audio-toggle="1"]') : null;
+    if (toggle) {
+      e.preventDefault();
+      toggleSampleAudio();
+      return;
+    }
+    var talkTrigger = e.target && e.target.closest ? e.target.closest('[data-talk-sami]') : null;
+    if (talkTrigger && audio && !audio.paused) {
+      audio.pause();
+    }
+  });
+
+  // Explicit ClickStartTrialCTA tracking + smooth scroll & input focus
+  function detectCtaLocation(el) {
+    var explicit = el.getAttribute('data-cta-loc');
+    if (explicit) return explicit;
+    if (el.closest('#cb-sticky-cta')) return 'sticky_mobile_bar';
+    if (el.closest('#cb-voice-modal')) return 'voice_modal';
+    if (el.closest('.hero-card')) return 'hero_card';
+    if (el.closest('header')) return 'nav';
+    if (el.closest('.hero')) return 'hero';
+    if (el.closest('#pricing')) return 'pricing';
+    if (el.closest('#compare')) return 'compare_card';
+    return 'mid_page_banner';
+  }
+
+  document.addEventListener('click', function(e) {
+    var link = e.target && e.target.closest ? e.target.closest('a[href*="#demo"], [data-cta-loc], [data-cb-trial="1"]') : null;
+    if (!link) return;
+    var loc = detectCtaLocation(link);
+    if (typeof window.fbq === 'function') {
+      try { window.fbq('trackCustom', 'ClickStartTrialCTA', { location: loc }); } catch(err) {}
+    }
+    var href = link.getAttribute('href') || '';
+    if (href === '#demo' || link.getAttribute('data-cb-trial') === '1') {
+      var demoSec = document.getElementById('demo');
+      if (demoSec) {
+        e.preventDefault();
+        try { demoSec.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch(err) { window.location.hash = '#demo'; }
+        setTimeout(function() {
+          var firstInp = demoSec.querySelector('input[name="name"]');
+          if (firstInp) {
+            try { firstInp.focus({ preventScroll: true }); } catch(err) { firstInp.focus(); }
+          }
+        }, 300);
+      }
+    }
+  });
+
+  // Sticky Mobile Bar auto-hide when #demo is in viewport or #cb-voice-modal is open
+  if (stickyBar) {
+    var demoInView = false;
+    var modalOpen = false;
+    function syncStickyVisibility() {
+      if (demoInView || modalOpen) {
+        stickyBar.classList.add('is-hidden');
+      } else {
+        stickyBar.classList.remove('is-hidden');
+      }
+    }
+    var demoTarget = document.getElementById('demo');
+    if (demoTarget && typeof window.IntersectionObserver === 'function') {
+      var io = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          demoInView = entry.isIntersecting;
+        });
+        syncStickyVisibility();
+      }, { threshold: 0.08 });
+      io.observe(demoTarget);
+    }
+    var vModal = document.getElementById('cb-voice-modal');
+    if (vModal && typeof window.MutationObserver === 'function') {
+      var mo = new MutationObserver(function() {
+        modalOpen = vModal.classList.contains('is-open') || vModal.getAttribute('aria-hidden') === 'false';
+        syncStickyVisibility();
+      });
+      mo.observe(vModal, { attributes: true, attributeFilter: ['class', 'aria-hidden'] });
+    }
+  }
+})();
+</script>
+<!--cb-conversion-bar-end-->
 </body></html>
