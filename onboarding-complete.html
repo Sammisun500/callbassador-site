@@ -121,7 +121,7 @@
       btnLabel.textContent = 'Connecting\u2026';
       timerEl.hidden = true;
     } else if (nextState === 'live') {
-      statusText.textContent = msg || 'Live with Sami \u00b7 Speak now';
+      statusText.textContent = msg || 'Connected \u2014 Speak now ("Hi Sami, my water heater is leaking")';
       btnLabel.textContent = 'End Call';
       timerEl.hidden = false;
     } else if (nextState === 'error') {
@@ -252,7 +252,7 @@
     setUI('connecting', 'Requesting microphone access\u2026');
     try {
       localStream = await navigator.mediaDevices.getUserMedia({
-        audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }
+        audio: { channelCount: 1, echoCancellation: true, noiseSuppression: true, autoGainControl: true }
       });
     } catch (micErr) {
       cleanupCall('Microphone permission needed \u00b7 Allow mic or call (610) 271-1725', true);
@@ -261,34 +261,71 @@
 
     setUI('connecting', 'Connecting to Sami\u2026');
     try {
-      var regResp = await fetch(API_HOST + '/register- magic-orb-call'.replace(' ', ''), {
+      var regHeaders = { 'Content-Type': 'application/json' };
+      regHeaders[SDK_HDR] = '3.0.1';
+      var regUrl = API_HOST + '/v2/create-public-orb-web-call/' + encodeURIComponent(AGENT_ID) + '?token=' + encodeURIComponent(ORB_TOKEN);
+      var regResp = await fetch(regUrl, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ agent_id: AGENT_ID, token: ORB_TOKEN })
+        headers: regHeaders,
+        body: JSON.stringify({ agent_id: AGENT_ID })
       });
-      if (!regResp.ok) throw new Error('Registration failed');
+      if (!regResp.ok) throw new Error('Registration failed: ' + regResp.status);
       var regData = await regResp.json();
       var accessToken = regData.access_token;
+      var callId = regData.call_id;
       if (!accessToken) throw new Error('Missing session token');
 
-      var lkResp = await fetch(API_HOST + '/get-lk-url', {
-        method: 'GET',
-        headers: { 'Authorization': 'Bearer ' + accessToken }
-      });
-      var lkData = lkResp.ok ? await lkResp.json() : { url: 'https://retell-ai-4ihahnq7.livekit.cloud' };
-      var whipBase = (lkData.url || 'https://retell-ai-4ihahnq7.livekit.cloud').replace(/^wss:/, 'https:').replace(/\/$/, '') + '/whip';
+      var defaultIce = [{ urls: ['stun:stun.l.google.com:19302', 'stun:stun.cloudflare.com:3478'] }];
+      var iceServers = (Array.isArray(regData.ice_servers) && regData.ice_servers.length > 0) ? regData.ice_servers : defaultIce;
 
-      pc = new RTCPeerConnection({
-        iceServers: [{ urls: ['stun:stun.l.google.com:19302', 'stun:stun1.l.google.com:19302'] }]
-      });
+      pc = new RTCPeerConnection({ iceServers: iceServers });
 
-      var audioTrack = localStream.getAudioTracks()[0];
-      pc.addTransceiver(audioTrack, { direction: 'sendrecv', streams: [localStream] });
+      localStream.getTracks().forEach(function(track) {
+        pc.addTrack(track, localStream);
+      });
       attachAnalyser(localStream, false);
 
-      dc = pc.createDataChannel('lossy', { ordered: true });
+      var useGateway = (regData.transport === 'gateway' || Boolean(callId));
+      var gatewayBase = API_HOST + '/webrtc-proxy/' + callId;
+      var gatewaySessionId = null;
+      var pendingCandidates = [];
 
-      pc.addEventListener('track', function(ev) {
+      function sendIceCandidate(cand) {
+        if (!gatewaySessionId || !cand) return;
+        var candObj = (typeof cand.toJSON === 'function') ? cand.toJSON() : cand;
+        var patchHeaders = {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + accessToken
+        };
+        patchHeaders[SDK_HDR] = '3.0.1';
+        fetch(gatewayBase + '/v1/webrtc/sessions/' + gatewaySessionId, {
+          method: 'PATCH',
+          headers: patchHeaders,
+          body: JSON.stringify({ candidate: candObj })
+        }).catch(function(){});
+      }
+
+      if (useGateway) {
+        dc = pc.createDataChannel('control');
+        dc.onmessage = function(ev) {
+          try {
+            var msg = JSON.parse(ev.data);
+            if (msg && msg.type === 'status' && (msg.state === 'ended' || msg.state === 'replaced')) {
+              cleanupCall('Call finished \u00b7 Tap below to talk to Sami again', false);
+            }
+          } catch (e) {}
+        };
+        pc.onicecandidate = function(ev) {
+          if (ev.candidate) {
+            if (gatewaySessionId) sendIceCandidate(ev.candidate);
+            else pendingCandidates.push(ev.candidate);
+          }
+        };
+      } else {
+        dc = pc.createDataChannel('lossy', { ordered: true });
+      }
+
+      pc.ontrack = function(ev) {
         if (ev.track && ev.track.kind === 'audio') {
           var rStream = (ev.streams && ev.streams[0]) ? ev.streams[0] : new MediaStream([ev.track]);
           if (!remoteAudio) {
@@ -300,43 +337,84 @@
           remoteAudio.play().catch(function(){});
           attachAnalyser(rStream, true);
         }
-      });
+      };
 
-      pc.addEventListener('connectionstatechange', function() {
-        if (!pc) return;
-        if (pc.connectionState === 'disconnected' || pc.connectionState === 'failed' || pc.connectionState === 'closed') {
+      var handshakeComplete = false;
+      pc.onconnectionstatechange = function() {
+        if (!pc || !handshakeComplete) return;
+        var cs = pc.connectionState;
+        if (cs === 'failed' || cs === 'closed') {
           if (state === 'live' || state === 'connecting') {
             cleanupCall('Call finished \u00b7 Tap below to talk to Sami again', false);
           }
         }
-      });
+      };
+      pc.oniceconnectionstatechange = function() {
+        if (!pc || !handshakeComplete) return;
+        var ics = pc.iceConnectionState;
+        if (ics === 'failed' || ics === 'closed') {
+          if (state === 'live' || state === 'connecting') {
+            cleanupCall('Call finished \u00b7 Tap below to talk to Sami again', false);
+          }
+        }
+      };
 
       var offer = await pc.createOffer();
       await pc.setLocalDescription(offer);
-      await waitIceGathering(pc, 1500);
 
-      var whipHeaders = {
-        'Authorization': 'Bearer ' + accessToken,
-        'Content-Type': 'application/sdp'
-      };
-      whipHeaders[SDK_HDR] = '2.0.7';
-
-      var whipResp = await fetch(whipBase, {
-        method: 'POST',
-        headers: whipHeaders,
-        body: pc.localDescription.sdp
-      });
-      if (!whipResp.ok) throw new Error('Voice handshake failed');
-
-      var loc = whipResp.headers.get('location');
-      if (loc) {
-        try { sessionUrl = new URL(loc, whipBase).toString(); } catch(e){}
+      if (useGateway) {
+        var sessHeaders = {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + accessToken
+        };
+        sessHeaders[SDK_HDR] = '3.0.1';
+        var sessResp = await fetch(gatewayBase + '/v1/webrtc/sessions', {
+          method: 'POST',
+          headers: sessHeaders,
+          body: JSON.stringify({ identity: 'client', sdp: pc.localDescription.sdp })
+        });
+        if (!sessResp.ok) throw new Error('Gateway session failed: ' + sessResp.status);
+        var sessData = await sessResp.json();
+        gatewaySessionId = sessData.session_id;
+        sessionUrl = gatewayBase + '/v1/webrtc/sessions/' + gatewaySessionId;
         sessionHeaders = { 'Authorization': 'Bearer ' + accessToken };
-        sessionHeaders[SDK_HDR] = '2.0.7';
-      }
+        sessionHeaders[SDK_HDR] = '3.0.1';
 
-      var answerSdp = await whipResp.text();
-      await pc.setRemoteDescription({ type: 'answer', sdp: answerSdp });
+        handshakeComplete = true;
+        await pc.setRemoteDescription({ type: 'answer', sdp: sessData.sdp });
+        while (pendingCandidates.length > 0) {
+          sendIceCandidate(pendingCandidates.shift());
+        }
+      } else {
+        await waitIceGathering(pc, 1500);
+        var lkHost = 'https://' + 'retell-ai-4ihahnq7.livekit.cloud';
+        var lkResp = await fetch(API_HOST + '/get-lk-url', {
+          method: 'GET',
+          headers: { 'Authorization': 'Bearer ' + accessToken }
+        });
+        var lkData = lkResp.ok ? await lkResp.json() : { url: lkHost };
+        var whipBase = (lkData.url || lkHost).replace(/^wss:/, 'https:').replace(/\/$/, '') + '/whip';
+        var whipHeaders = {
+          'Authorization': 'Bearer ' + accessToken,
+          'Content-Type': 'application/sdp'
+        };
+        whipHeaders[SDK_HDR] = '3.0.1';
+        var whipResp = await fetch(whipBase, {
+          method: 'POST',
+          headers: whipHeaders,
+          body: pc.localDescription.sdp
+        });
+        if (!whipResp.ok) throw new Error('Voice handshake failed');
+        var loc = whipResp.headers.get('location');
+        if (loc) {
+          try { sessionUrl = new URL(loc, whipBase).toString(); } catch(e){}
+          sessionHeaders = { 'Authorization': 'Bearer ' + accessToken };
+          sessionHeaders[SDK_HDR] = '3.0.1';
+        }
+        var answerSdp = await whipResp.text();
+        handshakeComplete = true;
+        await pc.setRemoteDescription({ type: 'answer', sdp: answerSdp });
+      }
 
       startedAt = Date.now();
       timerEl.textContent = '0:00';
@@ -347,7 +425,7 @@
         timerEl.textContent = m + ':' + (s < 10 ? '0' : '') + s;
       }, 1000);
 
-      setUI('live', 'Live with Sami \u00b7 Speak naturally');
+      setUI('live', 'Connected \u2014 Speak now ("Hi Sami, my water heater is leaking")');
       startAudioReactiveLoop();
       if (typeof window.fbq === 'function') {
         try { window.fbq('trackCustom', 'StartVoiceDemo'); } catch(e){}
@@ -397,7 +475,7 @@
       closeModal();
       return;
     }
-    var tr = t && t.closest ? t.closest('[data-cb-trial="1" data-cta-loc="voice_modal"]') : null;
+    var tr = t && t.closest ? t.closest('[data-cb-trial="1"]') : null;
     if (tr) {
       e.preventDefault();
       closeModal();
