@@ -96,6 +96,10 @@ footer{background:var(--navy2);color:#b9c4de;padding:48px 0;font-size:.9rem}foot
 
 
 
+
+
+
+
 /*trustbar-css-start*/
 .trustbar{background:#f0f4fb;border-bottom:1px solid #dce3f0;padding:22px 0}
 .trustbar.compact{padding:18px 0}
@@ -223,15 +227,15 @@ body.cb-modal-open #retell-widget-root,#cb-voice-modal.is-open~#retell-widget-ro
   .cb-hero-card-actions{margin-top:4px!important;padding-top:8px!important;gap:6px!important}
   .cb-hc-primary{padding:11px 14px!important;font-size:.9rem!important;width:100%!important;flex:1 1 100%!important}
   .cb-hc-secondary{padding:9px 12px!important;font-size:.81rem!important;width:100%!important;flex:1 1 100%!important}
-  .demo{padding:24px 0 36px!important}
-  .demo .step-badge{margin-bottom:6px!important;font-size:.72rem!important;padding:4px 10px!important}
-  .demo h2{font-size:1.32rem!important;line-height:1.18!important;margin:0 0 6px!important}
-  .demo .sub{font-size:.84rem!important;line-height:1.35!important;margin:0 0 12px!important}
-  .demo-flow{display:flex!important;flex-direction:column-reverse!important;gap:18px!important}
+  .demo{padding:16px 0 32px!important}
+  .demo .step-badge{margin-bottom:4px!important;font-size:.7rem!important;padding:3px 9px!important}
+  .demo h2{font-size:1.22rem!important;line-height:1.15!important;margin:0 0 4px!important}
+  .demo .sub{font-size:.8rem!important;line-height:1.3!important;margin:0 0 10px!important}
+  .demo-flow{display:flex!important;flex-direction:column-reverse!important;gap:16px!important}
   .demo-trust{margin:0!important}
-  .cb-step1-form{padding:16px 14px!important;gap:10px!important}
-  .cb-step1-form label{font-size:.83rem!important}
-  .cb-step1-form input,.cb-step1-form select{padding:10px 11px!important;margin-top:4px!important;font-size:.92rem!important}
+  .cb-step1-form{padding:14px 14px!important;gap:9px!important}
+  .cb-step1-form label{font-size:.82rem!important}
+  .cb-step1-form input,.cb-step1-form select{padding:9px 11px!important;margin-top:3px!important;font-size:.91rem!important}
 }
 @media(max-width:600px){
   .wrap.nav{padding:0 14px;height:56px;gap:8px}

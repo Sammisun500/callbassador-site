@@ -805,13 +805,11 @@
       var demoSec = document.getElementById('demo');
       if (demoSec) {
         e.preventDefault();
-        try { demoSec.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch(err) { window.location.hash = '#demo'; }
-        setTimeout(function() {
-          var firstInp = demoSec.querySelector('input[name="name"]');
-          if (firstInp) {
-            try { firstInp.focus({ preventScroll: true }); } catch(err) { firstInp.focus(); }
-          }
-        }, 300);
+        try { demoSec.scrollIntoView({ behavior: 'instant', block: 'start' }); } catch(err) { demoSec.scrollIntoView(true); }
+        var firstInp = demoSec.querySelector('input[name="name"]');
+        if (firstInp) {
+          try { firstInp.focus({ preventScroll: true }); } catch(err) {}
+        }
       }
     }
   });
