@@ -426,8 +426,11 @@
 
   function openModal() {
     modal.classList.add('is-open');
+    modal.classList.add('open');
+    document.body.classList.add('cb-modal-open');
     modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+    var rw = document.getElementById('retell-widget-root'); if (rw) rw.style.setProperty('display', 'none', 'important');
     setTimeout(function(){ try { btn.focus(); } catch(e){} }, 50);
   }
 
@@ -436,8 +439,11 @@
       cleanupCall('Ready \u00b7 Tap below and allow microphone access', false);
     }
     modal.classList.remove('is-open');
+    modal.classList.remove('open');
+    document.body.classList.remove('cb-modal-open');
     modal.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
+    var rw = document.getElementById('retell-widget-root'); if (rw) rw.style.removeProperty('display');
     if (location.hash === '#talk-to-sami') {
       try { history.replaceState(null, '', location.pathname + location.search); } catch(e){}
     }
@@ -506,17 +512,18 @@
 </script>
 <!--voice-modal-end-->
 <!--cb-conversion-bar-start-->
-<audio id="cb-sample-audio" preload="none" src="assets/sami-sample-call.mp3" hidden></audio>
+<audio id="cb-sample-audio" preload="none" src="assets/sample-call.mp3" hidden></audio>
 <div id="cb-sticky-cta" class="cb-sticky-cta" role="region" aria-label="Quick actions">
-  <button type="button" class="cb-sticky-play" id="cb-sticky-play-btn" data-cb-audio-toggle="1">&#9654; Hear 22s Call</button>
+  <button type="button" class="cb-sticky-play" id="cb-sticky-play-btn" data-cb-audio-toggle="1"><span id="sticky-audio-btn">&#9654; Hear 22s Call</span></button>
   <a class="cb-sticky-trial" id="cb-sticky-trial-btn" href="#demo" data-cta-loc="sticky_mobile_bar">Start 14-Day Free Trial &rarr;</a>
 </div>
 <script>
 (function(){
   var audio = document.getElementById('cb-sample-audio');
   var playBtn = document.getElementById('cb-play-sample-btn');
-  var playLabel = document.getElementById('cb-play-label');
+  var playLabel = document.getElementById('hero-sample-btn') || document.getElementById('cb-play-label');
   var stickyPlayBtn = document.getElementById('cb-sticky-play-btn');
+  var stickyPlayLabel = document.getElementById('sticky-audio-btn') || stickyPlayBtn;
   var progressEl = document.getElementById('cb-audio-progress');
   var trackEl = document.getElementById('cb-audio-track');
   var timerEl = document.getElementById('cb-audio-timer');
@@ -546,7 +553,9 @@
     }
     if (stickyPlayBtn) {
       stickyPlayBtn.setAttribute('data-playing', isPlaying ? '1' : '0');
-      stickyPlayBtn.textContent = isPlaying ? '⏸ Playing...' : '▶ Hear 22s Call';
+    }
+    if (stickyPlayLabel) {
+      stickyPlayLabel.textContent = isPlaying ? '⏸ Playing...' : '▶ Hear 22s Call';
     }
   }
 
@@ -649,56 +658,41 @@
     }
   });
 
-  // Sticky Mobile Bar auto-hide + Shadow DOM offset for floating chat FAB
+  // Sticky Mobile Bar auto-hide + Shadow DOM suppression on mobile / over modal
   var demoInView = false;
-  var modalOpen = false;
+  var vModalEl = document.getElementById('cb-voice-modal');
+  var modalOpen = Boolean(vModalEl && (vModalEl.classList.contains('is-open') || vModalEl.classList.contains('open') || vModalEl.getAttribute('aria-hidden') === 'false'));
   var isStep2Page = stickyBar && stickyBar.getAttribute('data-step2-page') === '1';
 
   function syncChatWidgetShadow() {
     var root = document.getElementById('retell-widget-root');
     if (!root) return false;
-    if (modalOpen) {
+    var isMobile = window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
+    if (modalOpen || isMobile) {
       root.style.setProperty('display', 'none', 'important');
+      root.style.setProperty('visibility', 'hidden', 'important');
+      root.style.setProperty('pointer-events', 'none', 'important');
     } else {
       root.style.removeProperty('display');
+      root.style.removeProperty('visibility');
+      root.style.removeProperty('pointer-events');
     }
     var host = root.firstElementChild;
     var sr = host && host.shadowRoot;
     if (!sr) return false;
     var stickyHidden = !stickyBar || isStep2Page || demoInView || modalOpen || stickyBar.classList.contains('is-hidden');
     host.setAttribute('data-cb-sticky-hidden', stickyHidden ? '1' : '0');
+    host.setAttribute('data-cb-modal-open', modalOpen ? '1' : '0');
     if (!sr.getElementById('cb-shadow-mobile-fix')) {
       var st = document.createElement('style');
       st.id = 'cb-shadow-mobile-fix';
       st.textContent = [
-        '@media (max-width: 820px) {',
-        '  :host(:not([data-cb-sticky-hidden="1"])) [class*="_container_"] {',
-        '    bottom: calc(78px + env(safe-area-inset-bottom, 0px)) !important;',
-        '    right: 12px !important;',
-        '    transition: bottom 0.22s ease !important;',
-        '  }',
-        '  :host([data-cb-sticky-hidden="1"]) [class*="_container_"] {',
-        '    bottom: calc(16px + env(safe-area-inset-bottom, 0px)) !important;',
-        '    right: 12px !important;',
-        '    transition: bottom 0.22s ease !important;',
-        '  }',
-        '  :host(:not([data-cb-sticky-hidden="1"])) [class*="_window_"] {',
-        '    bottom: calc(130px + env(safe-area-inset-bottom, 0px)) !important;',
-        '  }',
-        '  :host(:not([data-cb-sticky-hidden="1"])) [class*="_popup_"] {',
-        '    bottom: calc(134px + env(safe-area-inset-bottom, 0px)) !important;',
-        '  }',
-        '  [class*="_fabBase_"] {',
-        '    height: 38px !important;',
-        '    min-width: 0 !important;',
-        '    padding: 0 12px !important;',
-        '    font-size: 12.5px !important;',
-        '    box-shadow: 0 6px 18px rgba(10, 26, 63, 0.32) !important;',
-        '    border: 1px solid rgba(255, 255, 255, 0.22) !important;',
-        '  }',
-        '  [class*="_fabImage_"] {',
-        '    width: 22px !important;',
-        '    height: 22px !important;',
+        ':host([data-cb-modal-open="1"]), :host([data-cb-modal-open="1"]) [class*="_container_"] {',
+        '  display: none !important; visibility: hidden !important; pointer-events: none !important;',
+        '}',
+        '@media (max-width: 768px) {',
+        '  :host, [class*="_container_"], [class*="_fabBase_"] {',
+        '    display: none !important; visibility: hidden !important; pointer-events: none !important;',
         '  }',
         '}'
       ].join(' ');
@@ -726,16 +720,19 @@
       }, { threshold: 0.08 });
       io.observe(demoTarget);
     }
-    var vModal = document.getElementById('cb-voice-modal');
-    if (vModal && typeof window.MutationObserver === 'function') {
+    if (vModalEl && typeof window.MutationObserver === 'function') {
       var mo = new MutationObserver(function() {
-        modalOpen = vModal.classList.contains('is-open') || vModal.getAttribute('aria-hidden') === 'false';
+        modalOpen = vModalEl.classList.contains('is-open') || vModalEl.classList.contains('open') || vModalEl.getAttribute('aria-hidden') === 'false';
         syncStickyVisibility();
       });
-      mo.observe(vModal, { attributes: true, attributeFilter: ['class', 'aria-hidden'] });
+      mo.observe(vModalEl, { attributes: true, attributeFilter: ['class', 'aria-hidden'] });
     }
+    syncStickyVisibility();
   }
 
+  if (window.addEventListener) {
+    window.addEventListener('resize', syncChatWidgetShadow);
+  }
   syncChatWidgetShadow();
   if (typeof window.MutationObserver === 'function' && document.body) {
     var bodyMo = new MutationObserver(function() {
