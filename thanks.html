@@ -33,7 +33,7 @@
 <label>Mobile phone (for urgent lead texts &amp; demo link) *<input name="phone" id="onb-phone" type="tel" required autocomplete="tel" placeholder="(610) 555-0147"></label>
 <label>Email *<input name="email" id="onb-email" type="email" required autocomplete="email" placeholder="mike@millerplumbing.com"></label>
 <label>Trade *<select name="trade" id="onb-trade" required><option value="">Choose…</option><option value="Plumbing">Plumbing</option><option value="HVAC">HVAC</option><option value="Electrical">Electrical</option><option value="Roofing">Roofing</option><option value="Landscaping">Landscaping</option><option value="General contracting">General contracting</option><option value="Cleaning / maid / janitorial">Cleaning / maid / janitorial</option><option value="Other home services">Other home services</option></select></label>
-<label>Plan<select name="plan" id="onb-plan"><option value="Pro — $99/mo (November Special · 250 min, 24/7)" selected>Pro — $99/mo (November Special · 250 min, 24/7)</option><option value="Starter — $79/mo (14-day free trial)">Starter — $79/mo (14-day free trial)</option><option value="Growth — $249/mo (14-day free trial)">Growth — $249/mo (14-day free trial)</option><option value="Starter — $49/mo (14-day free trial)">Starter — $49/mo (14-day free trial)</option><option value="Growth — $199/mo (14-day free trial)">Growth — $199/mo (14-day free trial)</option><option value="Just hear a free custom demo first">Just hear a free custom demo first</option></select></label>
+<label>Plan<select name="plan" id="onb-plan"><option value="Pro — $99/mo (November Special · 250 min, 24/7)" selected>Pro — $99/mo (November Special · 250 min, 24/7)</option><option value="Starter — $79/mo (14-day free trial)">Starter — $79/mo (14-day free trial)</option><option value="Pro — $149/mo (14-day free trial)">Pro — $149/mo (14-day free trial)</option><option value="Crew — $249/mo (14-day free trial)">Crew — $249/mo (14-day free trial)</option><option value="Just hear a free custom demo first">Just hear a free custom demo first</option></select><span class="field-hint">Haven't activated your 14-day free trial card checkout yet? <a id="onb-stripe-trial-link" href="https://buy.stripe.com/00waEXbTG6AacLs05j1Jm01" target="_blank" rel="noopener" style="color:var(--navy);font-weight:700;text-decoration:underline">Start 14-day free trial on Stripe ($0.00 due today) &rarr;</a></span></label>
 
 <div class="full onb-sec-head" style="margin-top:12px">
   <h2>10 Quick Questions to Customize Your Sami</h2>
@@ -145,6 +145,26 @@
     var banner = document.getElementById('cb-prefill-banner');
     if (banner) banner.hidden = false;
   }
+  var onbPlanEl = document.getElementById('onb-plan');
+  var onbEmailEl = document.getElementById('onb-email');
+  var onbStripeLink = document.getElementById('onb-stripe-trial-link');
+  var ONB_STRIPE_URLS = {
+    'Pro — $99/mo (November Special · 250 min, 24/7)': 'https://buy.stripe.com/00waEXbTG6AacLs05j1Jm01',
+    'Starter — $79/mo (14-day free trial)': 'https://buy.stripe.com/6oU00j4re9Mm6n4g4h1Jm03',
+    'Pro — $149/mo (14-day free trial)': 'https://buy.stripe.com/8x27sL6zme2C3aS19n1Jm02',
+    'Crew — $249/mo (14-day free trial)': 'https://buy.stripe.com/14AeVd7DqcYycLs05j1Jm00',
+    'Growth — $249/mo (14-day free trial)': 'https://buy.stripe.com/14AeVd7DqcYycLs05j1Jm00'
+  };
+  function syncOnbStripeLink() {
+    if (!onbStripeLink) return;
+    var p = (onbPlanEl && onbPlanEl.value) || '';
+    var base = ONB_STRIPE_URLS[p] || 'https://buy.stripe.com/00waEXbTG6AacLs05j1Jm01';
+    var em = (onbEmailEl && onbEmailEl.value ? onbEmailEl.value.trim() : '');
+    onbStripeLink.href = em ? (base + '?prefilled_email=' + encodeURIComponent(em)) : base;
+  }
+  if (onbPlanEl) onbPlanEl.addEventListener('change', syncOnbStripeLink);
+  if (onbEmailEl) onbEmailEl.addEventListener('input', syncOnbStripeLink);
+  syncOnbStripeLink();
   var onbForm = document.getElementById('cb-onboarding-form');
   if (onbForm) {
     onbForm.addEventListener('submit', function(){
