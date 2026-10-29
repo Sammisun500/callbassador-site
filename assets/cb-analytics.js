@@ -21,7 +21,7 @@
     try{ if(window.fetch){fetch(url,{method:'GET',mode:'no-cors',keepalive:true,credentials:'omit'}).catch(function(){});return;} }catch(e){}
     try{(new Image()).src=url;}catch(e){}
   }
-  function ev(name,extra){ var u=utm(); hit(name+'__all'); hit(name+'__'+u); if(extra){hit(name+'__'+extra); hit(name+'__'+extra+'__'+u);} }
+  function ev(name,extra){ var u=utm(); hit(name+'__'+(extra?extra+'__':'')+u); }
   window.cbTrack=ev;
   var U=utm();
   ev('visit');

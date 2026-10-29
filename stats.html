@@ -5,17 +5,20 @@
 <h1>Callbassador funnel stats</h1><p>All-time counts since Oct 28, 2026 (cookieless counters; refresh to update). Ad = utm_content on the landing URL.</p><div id="out">Loading…</div>
 <script>
 var G='https://abacus.jasoncameron.dev/get/callbassador-com/';
-var ADS=['a5_price_anchor','a2_money','a1_pain','other','none','all'];
+var ADS=['a5_price_anchor','a2_money','a1_pain','other','none'];
 var PLANS=['pro99','starter79','pro149','crew249','demo'];
-function get(k){return fetch(G+k).then(function(r){return r.ok?r.json():{value:0}}).then(function(j){return j.value||0}).catch(function(){return 0})}
+async function get(k){await new Promise(function(z){setTimeout(z,250)});for(var i=0;i<5;i++){try{var r=await fetch(G+k);var j=await r.json();if(r.ok)return j.value||0;if(j&&/not found/i.test(j.error||''))return 0;}catch(e){}await new Promise(function(z){setTimeout(z,1500*(i+1))});}return '?'}
+function sum(a){return a.reduce(function(x,y){return (typeof x==='number'&&typeof y==='number')?x+y:'?'},0)}
 async function run(){
- var h='<h2>By ad</h2><table><tr><th>Ad</th><th>Visits</th><th>Sample played</th><th>Talk to Sami</th><th>Step 1 submits</th><th>Checkout redirects</th></tr>';
- for(const a of ADS){var r=await Promise.all(['visit','sample_audio_play','talk_to_sami_open','step1_submit','checkout_redirect'].map(function(e){return get(e+'__'+a)}));h+='<tr><td>'+a+'</td><td>'+r.join('</td><td>')+'</td></tr>';}
- h+='</table><h2>By plan</h2><table><tr><th>Plan</th><th>Step 1 submits</th><th>Checkout redirects</th></tr>';
- for(const p of PLANS){var r2=await Promise.all([get('step1_submit__'+p),get('checkout_redirect__'+p)]);h+='<tr><td>'+p+'</td><td>'+r2.join('</td><td>')+'</td></tr>';}
- h+='</table><h2>Plan × ad (checkout redirects)</h2><table><tr><th>Plan</th>'+ADS.slice(0,5).map(function(a){return '<th>'+a+'</th>'}).join('')+'</tr>';
- for(const p of PLANS){var r3=await Promise.all(ADS.slice(0,5).map(function(a){return get('checkout_redirect__'+p+'__'+a)}));h+='<tr><td>'+p+'</td><td>'+r3.join('</td><td>')+'</td></tr>';}
- document.getElementById('out').innerHTML=h+'</table>';
+ var V={},S={},C={},A={},T={};
+ for(const a of ADS){V[a]=await get('visit__'+a);A[a]=await get('sample_audio_play__'+a);T[a]=await get('talk_to_sami_open__'+a);
+  for(const p of PLANS){S[p+a]=await get('step1_submit__'+p+'__'+a);C[p+a]=(p==='demo')?0:await get('checkout_redirect__'+p+'__'+a);}}
+ var h='<h2>By ad (utm_content)</h2><table><tr><th>Ad</th><th>Visits</th><th>Sample played</th><th>Talk to Sami</th><th>Step 1 submits</th><th>Stripe checkout clicks</th></tr>';
+ var tot=[0,0,0,0,0];
+ ADS.forEach(function(a){var r=[V[a],A[a],T[a],sum(PLANS.map(function(p){return S[p+a]})),sum(PLANS.map(function(p){return C[p+a]}))];r.forEach(function(v,i){tot[i]=(typeof tot[i]==='number'&&typeof v==='number')?tot[i]+v:'?'});h+='<tr><td>'+a+'</td><td>'+r.join('</td><td>')+'</td></tr>';});
+ h+='<tr><th>Total</th><th>'+tot.join('</th><th>')+'</th></tr></table><h2>By plan</h2><table><tr><th>Plan</th><th>Step 1 submits</th><th>Stripe checkout clicks</th>'+ADS.map(function(a){return '<th>clicks: '+a+'</th>'}).join('')+'</tr>';
+ PLANS.forEach(function(p){h+='<tr><td>'+p+'</td><td>'+sum(ADS.map(function(a){return S[p+a]}))+'</td><td>'+sum(ADS.map(function(a){return C[p+a]}))+'</td><td>'+ADS.map(function(a){return C[p+a]}).join('</td><td>')+'</td></tr>';});
+ document.getElementById('out').innerHTML=h+'</table><p style="font-size:.85rem;opacity:.7">"other" = a utm_content not in the list (includes our QA test traffic from Oct 28); "none" = no ad tag (direct/organic).</p>';
 }
 run();
 </script><!--voice-modal-start-->
