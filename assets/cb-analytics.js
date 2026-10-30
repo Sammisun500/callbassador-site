@@ -55,7 +55,7 @@
       if(next.indexOf('https://')!==0)return;
       e.preventDefault();
       var em=(f.elements['email']&&f.elements['email'].value)||'';
-      if(em&&next.indexOf('buy.stripe.com')!==-1)next+=(next.indexOf('?')===-1?'?':'&')+'prefilled_email='+encodeURIComponent(em);
+      if(em&&next.indexOf('buy.stripe.com')!==-1&&next.indexOf('prefilled_email=')===-1)next+=(next.indexOf('?')===-1?'?':'&')+'prefilled_email='+encodeURIComponent(em);
       var btn=f.querySelector('button[type=submit],input[type=submit],button:not([type])'); if(btn){btn.disabled=true;}
       var done=false; function go(){ if(done)return; done=true; location.href=next; }
       var ctl=window.AbortController?new AbortController():null;
