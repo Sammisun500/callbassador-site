@@ -45,4 +45,23 @@
   document.addEventListener('play',function(e){
     try{var t=e.target; if(!played&&t&&t.tagName==='AUDIO'&&(t.currentSrc||t.src||'').indexOf('sample')!==-1){played=true;ev('sample_audio_play');}}catch(x){}
   },true);
+  // Oct 30 2026: resilient Step 1 submit. Sends the lead to FormSubmit in the background
+  // and always continues to Stripe checkout, even if FormSubmit is slow or down.
+  document.addEventListener('submit',function(e){
+    try{var f=e.target; if(!f||!f.classList||!f.classList.contains('cb-step1-form'))return;
+      var act=f.getAttribute('action')||''; if(act.indexOf('formsubmit.co/')===-1||!window.fetch||!window.FormData)return;
+      if(f.elements['_honey']&&f.elements['_honey'].value)return;
+      var next=(f.elements['_next']&&f.elements['_next'].value)||'';
+      if(next.indexOf('https://')!==0)return;
+      e.preventDefault();
+      var em=(f.elements['email']&&f.elements['email'].value)||'';
+      if(em&&next.indexOf('buy.stripe.com')!==-1)next+=(next.indexOf('?')===-1?'?':'&')+'prefilled_email='+encodeURIComponent(em);
+      var btn=f.querySelector('button[type=submit],input[type=submit],button:not([type])'); if(btn){btn.disabled=true;}
+      var done=false; function go(){ if(done)return; done=true; location.href=next; }
+      var ctl=window.AbortController?new AbortController():null;
+      setTimeout(function(){ if(ctl){try{ctl.abort();}catch(x){}} go(); },4000);
+      fetch(act.replace('formsubmit.co/','formsubmit.co/ajax/'),{method:'POST',body:new FormData(f),headers:{'Accept':'application/json'},signal:ctl?ctl.signal:undefined})
+        .then(function(r){ if(!r||!r.ok)hit('step1_fs_fail__'+U); go(); },function(){ hit('step1_fs_fail__'+U); go(); });
+    }catch(x){}
+  },false);
 })();
