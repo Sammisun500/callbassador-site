@@ -18,18 +18,6 @@
 <p class="lead">Never miss a call while you're on a job. Sami, Callbassador's done-for-you AI receptionist, answers when you can't and texts you the details.</p>
 <p class="risk mobile-trust-line">$0.00 due today &middot; 14-day free trial &middot; Free custom setup &middot; <span class="us-badge-inline"><svg class="us-flag-icon" width="18" height="13" viewBox="0 0 18 13" role="img" aria-label="U.S. flag"><rect width="18" height="13" rx="2" fill="#B22234"/><path d="M0 1.5H18M0 3.5H18M0 5.5H18M0 7.5H18M0 9.5H18M0 11.5H18" stroke="#fff" stroke-width="1"/><rect width="8" height="7" fill="#3C3B6E"/><g fill="#fff"><circle cx="1.6" cy="1.75" r=".55"/><circle cx="4" cy="1.75" r=".55"/><circle cx="6.4" cy="1.75" r=".55"/><circle cx="2.8" cy="2.62" r=".55"/><circle cx="5.2" cy="2.62" r=".55"/><circle cx="1.6" cy="3.5" r=".55"/><circle cx="4" cy="3.5" r=".55"/><circle cx="6.4" cy="3.5" r=".55"/><circle cx="2.8" cy="4.38" r=".55"/><circle cx="5.2" cy="4.38" r=".55"/><circle cx="1.6" cy="5.25" r=".55"/><circle cx="4" cy="5.25" r=".55"/><circle cx="6.4" cy="5.25" r=".55"/></g></svg> U.S.-Based (Exton, PA)</span></p>
 <!--hero-card-start--><div class="phone hero-card" id="hero-card" aria-label="Example call transcript">
-<div class="cb-audio-player" id="cb-audio-player">
-  <audio id="cb-sample-audio" preload="metadata" src="../assets/sample-call.mp3"></audio>
-  <button type="button" class="cb-play-sample-btn" id="cb-play-sample-btn" data-cb-audio-toggle="1" aria-label="Play 22-second real emergency call sample">
-    <span class="cb-play-label" id="hero-sample-btn">&#9654; Hear a Real 22-Sec Emergency Call (No Mic Needed)</span>
-  </button>
-  <div class="cb-audio-bar-wrap">
-    <div class="cb-audio-track" id="cb-audio-track" role="slider" aria-label="Call audio progress" aria-valuemin="0" aria-valuemax="22" aria-valuenow="0" tabindex="0">
-      <div class="cb-audio-progress" id="cb-audio-progress"></div>
-    </div>
-    <span class="cb-audio-timer" id="cb-audio-timer">0:00 / 0:22</span>
-  </div>
-</div>
 <div class="tag">Incoming call &middot; 2:14 AM &middot; Water Heater Leak</div>
 <div class="b s">Thanks for calling Miller Plumbing &amp; Heating, this is Sami! How can I help you today?</div>
 <div class="b">Hey, yeah&mdash;our water heater just started leaking all over the basement floor.<span class="hide-mobile"> Do you guys have anyone who can come out today?</span></div>
@@ -37,10 +25,6 @@
 <div class="b hide-mobile">It's 412 Oak Lane in West Chester, and yeah, I just turned the top valve off.</div>
 <div class="b s hide-mobile">Perfect, that stops more water from coming in. I'm texting your address and number to our lead tech right now&mdash;he'll call you back in under five minutes with his ETA!</div>
 <div class="tag">&#10003; Emergency + address texted to owner in 3 seconds</div>
-<div class="cb-hero-card-actions">
-  <a class="btn cb-hc-primary" href="#demo" data-cta-loc="hero_card">Start 14-Day Free Trial &mdash; $0 Today &rarr;</a>
-  <a class="cb-hc-secondary" href="#talk-to-sami" data-talk-sami="1">Prefer to test live? Talk to Sami now &rarr;</a>
-</div>
 </div><!--hero-card-end-->
 <h2>The Delaware electrical market</h2>
 <p>Electrical work in Delaware covers older Wilmington homes with outdated wiring, steady new construction in southern New Castle and Kent counties, and coastal homes in Sussex County that need surge protection and generators. Homeowners around Lewes and Rehoboth often ask about standby generators before storm season.</p>
@@ -729,239 +713,23 @@
 </script>
 <!--voice-modal-end-->
 <!--cb-conversion-bar-start-->
-
-<div id="cb-sticky-cta" class="cb-sticky-cta" role="region" aria-label="Quick actions">
-  <button type="button" class="cb-sticky-play" id="cb-sticky-play-btn" data-cb-audio-toggle="1"><span id="sticky-audio-btn">&#9654; Hear 22s Call</span></button>
-  <a class="cb-sticky-trial" id="cb-sticky-trial-btn" href="#demo" data-cta-loc="sticky_mobile_bar">Start 14-Day Free Trial &rarr;</a>
-</div>
 <script>
 (function(){
-  var audio = document.getElementById('cb-sample-audio');
-  var playBtn = document.getElementById('cb-play-sample-btn');
-  var playLabel = document.getElementById('hero-sample-btn') || document.getElementById('cb-play-label');
-  var stickyPlayBtn = document.getElementById('cb-sticky-play-btn');
-  var stickyPlayLabel = document.getElementById('sticky-audio-btn') || stickyPlayBtn;
-  var progressEl = document.getElementById('cb-audio-progress');
-  var trackEl = document.getElementById('cb-audio-track');
-  var timerEl = document.getElementById('cb-audio-timer');
-  var stickyBar = document.getElementById('cb-sticky-cta');
-  var TOTAL_FALLBACK = 22;
-
-  function fmtTime(sec) {
-    sec = Math.max(0, Math.round(sec || 0));
-    var m = Math.floor(sec / 60);
-    var s = sec % 60;
-    return m + ':' + (s < 10 ? '0' : '') + s;
-  }
-
-  function getDuration() {
-    if (audio && audio.duration && isFinite(audio.duration) && audio.duration > 0) {
-      return audio.duration;
-    }
-    return TOTAL_FALLBACK;
-  }
-
-  function syncAudioUI(isPlaying) {
-    if (playBtn) playBtn.setAttribute('data-playing', isPlaying ? '1' : '0');
-    if (playLabel) {
-      playLabel.textContent = isPlaying
-        ? '⏸ Playing real call...'
-        : '▶ Hear a Real 22-Sec Emergency Call (No Mic Needed)';
-    }
-    if (stickyPlayBtn) {
-      stickyPlayBtn.setAttribute('data-playing', isPlaying ? '1' : '0');
-    }
-    if (stickyPlayLabel) {
-      stickyPlayLabel.textContent = isPlaying ? '⏸ Playing...' : '▶ Hear 22s Call';
-    }
-  }
-
-  function updateProgress() {
-    if (!audio) return;
-    var dur = getDuration();
-    var cur = audio.currentTime || 0;
-    var pct = Math.min(100, Math.max(0, (cur / dur) * 100));
-    if (progressEl) progressEl.style.width = pct.toFixed(1) + '%';
-    if (trackEl) trackEl.setAttribute('aria-valuenow', String(Math.round(cur)));
-    if (timerEl) timerEl.textContent = fmtTime(cur) + ' / ' + fmtTime(dur);
-  }
-
-  function toggleSampleAudio() {
-    if (!audio) return;
-    if (audio.paused) {
-      var p = audio.play();
-      syncAudioUI(true);
-      if (typeof window.fbq === 'function') {
-        try { window.fbq('trackCustom', 'PlaySampleAudio'); } catch(e) {}
-      }
-      if (p && typeof p.catch === 'function') {
-        p.catch(function() { syncAudioUI(false); });
-      }
-    } else {
-      audio.pause();
-      syncAudioUI(false);
-    }
-  }
-
-  if (audio) {
-    audio.addEventListener('play', function() { syncAudioUI(true); });
-    audio.addEventListener('pause', function() { syncAudioUI(false); });
-    audio.addEventListener('ended', function() {
-      audio.currentTime = 0;
-      syncAudioUI(false);
-      updateProgress();
-    });
-    audio.addEventListener('timeupdate', updateProgress);
-    audio.addEventListener('loadedmetadata', updateProgress);
-  }
-
-  if (trackEl && audio) {
-    trackEl.addEventListener('click', function(e) {
-      var rect = trackEl.getBoundingClientRect();
-      if (!rect.width) return;
-      var ratio = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
-      audio.currentTime = ratio * getDuration();
-      updateProgress();
-    });
-  }
-
-  document.addEventListener('click', function(e) {
-    var toggle = e.target && e.target.closest ? e.target.closest('[data-cb-audio-toggle="1"]') : null;
-    if (toggle) {
-      e.preventDefault();
-      toggleSampleAudio();
-      return;
-    }
-    var talkTrigger = e.target && e.target.closest ? e.target.closest('[data-talk-sami]') : null;
-    if (talkTrigger && audio && !audio.paused) {
-      audio.pause();
+  function loc(el){var x=el.getAttribute('data-cta-loc');if(x)return x;
+    if(el.closest('#cb-voice-modal'))return 'voice_modal';if(el.closest('.hero-card'))return 'hero_card';
+    if(el.closest('header'))return 'nav';if(el.closest('.hero'))return 'hero';if(el.closest('#pricing'))return 'pricing';
+    if(el.closest('#compare'))return 'compare_card';return 'mid_page_banner';}
+  document.addEventListener('click',function(e){
+    var link=e.target&&e.target.closest?e.target.closest('a[href*="#demo"], [data-cta-loc], [data-cb-trial="1"]'):null;
+    if(!link)return;
+    if(typeof window.fbq==='function'){try{window.fbq('trackCustom','ClickStartTrialCTA',{location:loc(link)});}catch(err){}}
+    var href=link.getAttribute('href')||'';
+    if(href==='#demo'||link.getAttribute('data-cb-trial')==='1'){
+      var d=document.getElementById('demo');
+      if(d){e.preventDefault();try{d.scrollIntoView({behavior:'instant',block:'start'});}catch(err){d.scrollIntoView(true);}
+        var f=d.querySelector('input[name="name"]');if(f){try{f.focus({preventScroll:true});}catch(err){}}}
     }
   });
-
-  // Explicit ClickStartTrialCTA tracking + smooth scroll & input focus
-  function detectCtaLocation(el) {
-    var explicit = el.getAttribute('data-cta-loc');
-    if (explicit) return explicit;
-    if (el.closest('#cb-sticky-cta')) return 'sticky_mobile_bar';
-    if (el.closest('#cb-voice-modal')) return 'voice_modal';
-    if (el.closest('.hero-card')) return 'hero_card';
-    if (el.closest('header')) return 'nav';
-    if (el.closest('.hero')) return 'hero';
-    if (el.closest('#pricing')) return 'pricing';
-    if (el.closest('#compare')) return 'compare_card';
-    return 'mid_page_banner';
-  }
-
-  document.addEventListener('click', function(e) {
-    var link = e.target && e.target.closest ? e.target.closest('a[href*="#demo"], [data-cta-loc], [data-cb-trial="1"]') : null;
-    if (!link) return;
-    var loc = detectCtaLocation(link);
-    if (typeof window.fbq === 'function') {
-      try { window.fbq('trackCustom', 'ClickStartTrialCTA', { location: loc }); } catch(err) {}
-    }
-    var href = link.getAttribute('href') || '';
-    if (href === '#demo' || link.getAttribute('data-cb-trial') === '1') {
-      var demoSec = document.getElementById('demo');
-      if (demoSec) {
-        e.preventDefault();
-        try { demoSec.scrollIntoView({ behavior: 'instant', block: 'start' }); } catch(err) { demoSec.scrollIntoView(true); }
-        var firstInp = demoSec.querySelector('input[name="name"]');
-        if (firstInp) {
-          try { firstInp.focus({ preventScroll: true }); } catch(err) {}
-        }
-      }
-    }
-  });
-
-  // Sticky Mobile Bar auto-hide + Shadow DOM suppression on mobile / over modal
-  var demoInView = false;
-  var vModalEl = document.getElementById('cb-voice-modal');
-  var modalOpen = Boolean(vModalEl && (vModalEl.classList.contains('is-open') || vModalEl.classList.contains('open') || vModalEl.getAttribute('aria-hidden') === 'false'));
-  var isStep2Page = stickyBar && stickyBar.getAttribute('data-step2-page') === '1';
-
-  function syncChatWidgetShadow() {
-    var root = document.getElementById('retell-widget-root');
-    if (!root) return false;
-    var isMobile = window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
-    if (modalOpen || isMobile) {
-      root.style.setProperty('display', 'none', 'important');
-      root.style.setProperty('visibility', 'hidden', 'important');
-      root.style.setProperty('pointer-events', 'none', 'important');
-    } else {
-      root.style.removeProperty('display');
-      root.style.removeProperty('visibility');
-      root.style.removeProperty('pointer-events');
-    }
-    var host = root.firstElementChild;
-    var sr = host && host.shadowRoot;
-    if (!sr) return false;
-    var stickyHidden = !stickyBar || isStep2Page || demoInView || modalOpen || stickyBar.classList.contains('is-hidden');
-    host.setAttribute('data-cb-sticky-hidden', stickyHidden ? '1' : '0');
-    host.setAttribute('data-cb-modal-open', modalOpen ? '1' : '0');
-    if (!sr.getElementById('cb-shadow-mobile-fix')) {
-      var st = document.createElement('style');
-      st.id = 'cb-shadow-mobile-fix';
-      st.textContent = [
-        ':host([data-cb-modal-open="1"]), :host([data-cb-modal-open="1"]) [class*="_container_"] {',
-        '  display: none !important; visibility: hidden !important; pointer-events: none !important;',
-        '}',
-        '@media (max-width: 768px) {',
-        '  :host, [class*="_container_"], [class*="_fabBase_"] {',
-        '    display: none !important; visibility: hidden !important; pointer-events: none !important;',
-        '  }',
-        '}'
-      ].join(' ');
-      sr.appendChild(st);
-    }
-    return true;
-  }
-
-  if (stickyBar) {
-    function syncStickyVisibility() {
-      if (demoInView || modalOpen || isStep2Page) {
-        stickyBar.classList.add('is-hidden');
-      } else {
-        stickyBar.classList.remove('is-hidden');
-      }
-      syncChatWidgetShadow();
-    }
-    var demoTarget = document.getElementById('demo');
-    if (demoTarget && typeof window.IntersectionObserver === 'function') {
-      var io = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-          demoInView = entry.isIntersecting;
-        });
-        syncStickyVisibility();
-      }, { threshold: 0.08 });
-      io.observe(demoTarget);
-    }
-    if (vModalEl && typeof window.MutationObserver === 'function') {
-      var mo = new MutationObserver(function() {
-        modalOpen = vModalEl.classList.contains('is-open') || vModalEl.classList.contains('open') || vModalEl.getAttribute('aria-hidden') === 'false';
-        syncStickyVisibility();
-      });
-      mo.observe(vModalEl, { attributes: true, attributeFilter: ['class', 'aria-hidden'] });
-    }
-    syncStickyVisibility();
-  }
-
-  if (window.addEventListener) {
-    window.addEventListener('resize', syncChatWidgetShadow);
-  }
-  syncChatWidgetShadow();
-  if (typeof window.MutationObserver === 'function' && document.body) {
-    var bodyMo = new MutationObserver(function() {
-      syncChatWidgetShadow();
-    });
-    bodyMo.observe(document.body, { childList: true, subtree: true });
-  }
-  var pollCount = 0;
-  var pollTimer = setInterval(function() {
-    pollCount++;
-    if (syncChatWidgetShadow() || pollCount > 40) {
-      if (pollCount > 40) clearInterval(pollTimer);
-    }
-  }, 150);
 })();
 </script>
 <!--cb-conversion-bar-end-->
