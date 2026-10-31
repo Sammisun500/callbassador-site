@@ -37,6 +37,7 @@
     try{var a=e.target&&e.target.closest&&e.target.closest('a,button'); if(!a)return;
       var h=a.getAttribute('href')||'';
       if(h.indexOf('buy.stripe.com')!==-1)ev('checkout_redirect',planSlug(h));
+      if(h.indexOf('tel:')===0)ev('call_link_tap');
       if(a.hasAttribute('data-talk-sami')||h==='#talk-to-sami'||h.indexOf('?talk=1')!==-1)ev('talk_to_sami_open');
     }catch(x){}
   },true);
