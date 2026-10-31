@@ -58,14 +58,14 @@
 <label>Mobile Phone (for instant call/text alerts) *<input name="phone" type="tel" required autocomplete="tel" placeholder="(610) 555-0147"></label>
 <label>Email Address *<input name="email" type="email" required autocomplete="email" placeholder="mike@millerplumbing.com"></label>
 <label class="full">Your Trade *<select name="trade" required><option value="">Choose…</option><option value="Plumbing" selected>Plumbing</option><option value="HVAC">HVAC</option><option value="Electrical">Electrical</option><option value="Roofing">Roofing</option><option value="Landscaping">Landscaping</option><option value="General contracting">General contracting</option><option value="Cleaning / maid / janitorial">Cleaning / maid / janitorial</option><option value="Other home services">Other home services</option></select></label>
-<input type="hidden" name="plan" id="cb-plan-input" value="Pro — $99/mo (November Special · 250 min, 24/7)">
+<input type="hidden" name="plan" id="cb-plan-input" value="Pro — $99/mo (November Special · 400 min, 24/7)">
 <div class="full cb-plan-pill" id="cb-plan-pill">
   <span>&#10003; Selected Plan: <strong id="cb-plan-pill-label">Pro ($99/mo after 14-day free trial &middot; $0 today)</strong> &mdash; <button type="button" class="cb-change-plan-btn" id="cb-change-plan-btn" aria-expanded="false" aria-controls="cb-plan-drawer">Change plan</button></span>
 </div>
 <div class="full cb-plan-drawer" id="cb-plan-drawer" hidden>
   <label>Choose your plan after the 14-day free trial ($0 due today)
     <select id="plan-select" aria-label="Choose plan">
-      <option value="Pro — $99/mo (November Special · 250 min, 24/7)" data-pill="Pro ($99/mo after 14-day free trial · $0 today)" selected>Pro &mdash; $99/mo (November Special &middot; 250 min, 24/7)</option>
+      <option value="Pro — $99/mo (November Special · 400 min, 24/7)" data-pill="Pro ($99/mo after 14-day free trial · $0 today)" selected>Pro &mdash; $99/mo (November Special &middot; 400 min, 24/7)</option>
       <option value="Starter — $79/mo (14-day free trial)" data-pill="Starter ($79/mo after 14-day free trial · $0 today)">Starter &mdash; $79/mo (14-day free trial)</option>
       <option value="Pro — $149/mo (14-day free trial)" data-pill="Pro ($149/mo after 14-day free trial · $0 today)">Pro &mdash; $149/mo (14-day free trial)</option>
       <option value="Crew — $249/mo (14-day free trial)" data-pill="Crew ($249/mo after 14-day free trial · $0 today)">Crew &mdash; $249/mo (14-day free trial)</option>
@@ -86,7 +86,7 @@
   var changeBtn=document.getElementById('cb-change-plan-btn');
   var drawer=document.getElementById('cb-plan-drawer');
   var PLAN_URLS={
-    'Pro — $99/mo (November Special · 250 min, 24/7)':'https://buy.stripe.com/00waEXbTG6AacLs05j1Jm01',
+    'Pro — $99/mo (November Special · 400 min, 24/7)':'https://buy.stripe.com/00waEXbTG6AacLs05j1Jm01',
     'Starter — $79/mo (14-day free trial)':'https://buy.stripe.com/6oU00j4re9Mm6n4g4h1Jm03',
     'Pro — $149/mo (14-day free trial)':'https://buy.stripe.com/8x27sL6zme2C3aS19n1Jm02',
     'Crew — $249/mo (14-day free trial)':'https://buy.stripe.com/14AeVd7DqcYycLs05j1Jm00',
@@ -109,7 +109,7 @@
     return base;
   }
   function syncAllFormsNext(){
-    var curPlan=(planInp&&planInp.value)||(sel&&sel.value)||'Pro — $99/mo (November Special · 250 min, 24/7)';
+    var curPlan=(planInp&&planInp.value)||(sel&&sel.value)||'Pro — $99/mo (November Special · 400 min, 24/7)';
     document.querySelectorAll('form.cb-step1-form').forEach(function(f){
       var nextInp=f.elements['_next']||f.querySelector('input[name="_next"]');
       var emailInp=f.elements['email']||f.querySelector('input[name="email"]');
