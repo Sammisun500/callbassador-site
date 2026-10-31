@@ -173,7 +173,7 @@ document.getElementById('c-out').innerHTML='Estimated value of those calls: <str
 <p class="sub">Every plan includes free custom setup and a 14-day free trial. $0.00 due today — cancel anytime.</p>
 <div class="cards three">
 <div class="card price" data-tier="Starter"><h3>Starter</h3><div class="amt">$79<small>/mo</small></div><ul><li>150 minutes</li><li>24/7 answering</li><li>Call summaries</li><li>Emergency flagging</li></ul><a class="btn" href="#demo" data-tier="Starter" data-plan="Starter — $79/mo (14-day free trial)" data-pill="Starter ($79/mo after 14-day free trial · $0 today)" data-cta-loc="pricing_starter">Start 14-day free trial</a></div>
-<div class="card price pop" data-tier="Pro"><span class="badge">Most popular</span><h3>Pro</h3><div class="amt">$149<small>/mo</small></div><p class="note" style="margin:4px 0 8px"><strong>$99/mo for 12 months</strong> this November</p><ul><li>400 minutes</li><li>Everything in Starter</li><li>Appointment booking</li></ul><a class="btn" href="#demo" data-tier="Pro" data-plan="Pro — $99/mo (November Special · 250 min, 24/7)" data-pill="Pro ($99/mo after 14-day free trial · $0 today)" data-cta-loc="pricing_pro">Start 14-day free trial</a></div>
+<div class="card price pop" data-tier="Pro"><span class="badge">Most popular</span><h3>Pro</h3><div class="amt">$149<small>/mo</small></div><p class="note" style="margin:4px 0 8px"><strong>$99/mo for 12 months</strong> this November</p><ul><li>400 minutes</li><li>Everything in Starter</li><li>Appointment booking</li></ul><a class="btn" href="#demo" data-tier="Pro" data-plan="Pro — $99/mo (November Special · 400 min, 24/7)" data-pill="Pro ($99/mo after 14-day free trial · $0 today)" data-cta-loc="pricing_pro">Start 14-day free trial</a></div>
 <div class="card price" data-tier="Growth"><h3>Growth (Crew)</h3><div class="amt">$249<small>/mo</small></div><ul><li>800 minutes</li><li>Booking</li><li>Multiple techs and calendars</li></ul><a class="btn" href="#demo" data-tier="Growth" data-plan="Crew — $249/mo (14-day free trial)" data-pill="Crew ($249/mo after 14-day free trial · $0 today)" data-cta-loc="pricing_growth">Start 14-day free trial</a></div>
 </div>
 <p class="rv-special">November: Pro is $99/mo for your first 12 months (normally $149).</p>
@@ -201,14 +201,14 @@ document.getElementById('c-out').innerHTML='Estimated value of those calls: <str
 <label>Mobile Phone (for instant call/text alerts) *<input name="phone" type="tel" required autocomplete="tel" placeholder="(610) 555-0147"></label>
 <label>Email Address *<input name="email" type="email" required autocomplete="email" placeholder="mike@millerplumbing.com"></label>
 <label class="full">Your Trade *<select name="trade" required><option value="">Choose…</option><option value="Plumbing">Plumbing</option><option value="HVAC">HVAC</option><option value="Electrical">Electrical</option><option value="Roofing">Roofing</option><option value="Landscaping">Landscaping</option><option value="General contracting">General contracting</option><option value="Cleaning / maid / janitorial">Cleaning / maid / janitorial</option><option value="Other home services">Other home services</option></select></label>
-<input type="hidden" name="plan" id="cb-plan-input" value="Pro — $99/mo (November Special · 250 min, 24/7)">
+<input type="hidden" name="plan" id="cb-plan-input" value="Pro — $99/mo (November Special · 400 min, 24/7)">
 <div class="full cb-plan-pill" id="cb-plan-pill">
   <span>&#10003; Selected Plan: <strong id="cb-plan-pill-label">Pro ($99/mo after 14-day free trial &middot; $0 today)</strong> &mdash; <button type="button" class="cb-change-plan-btn" id="cb-change-plan-btn" aria-expanded="false" aria-controls="cb-plan-drawer">Change plan</button></span>
 </div>
 <div class="full cb-plan-drawer" id="cb-plan-drawer" hidden>
   <label>Choose your plan after the 14-day free trial ($0 due today)
     <select id="plan-select" aria-label="Choose plan">
-      <option value="Pro — $99/mo (November Special · 250 min, 24/7)" data-pill="Pro ($99/mo after 14-day free trial · $0 today)" selected>Pro &mdash; $99/mo (November Special &middot; 250 min, 24/7)</option>
+      <option value="Pro — $99/mo (November Special · 400 min, 24/7)" data-pill="Pro ($99/mo after 14-day free trial · $0 today)" selected>Pro &mdash; $99/mo (November Special &middot; 400 min, 24/7)</option>
       <option value="Starter — $79/mo (14-day free trial)" data-pill="Starter ($79/mo after 14-day free trial · $0 today)">Starter &mdash; $79/mo (14-day free trial)</option>
       <option value="Pro — $149/mo (14-day free trial)" data-pill="Pro ($149/mo after 14-day free trial · $0 today)">Pro &mdash; $149/mo (14-day free trial)</option>
       <option value="Crew — $249/mo (14-day free trial)" data-pill="Crew ($249/mo after 14-day free trial · $0 today)">Crew &mdash; $249/mo (14-day free trial)</option>
@@ -229,7 +229,7 @@ document.getElementById('c-out').innerHTML='Estimated value of those calls: <str
   var changeBtn=document.getElementById('cb-change-plan-btn');
   var drawer=document.getElementById('cb-plan-drawer');
   var PLAN_URLS={
-    'Pro — $99/mo (November Special · 250 min, 24/7)':'https://buy.stripe.com/00waEXbTG6AacLs05j1Jm01',
+    'Pro — $99/mo (November Special · 400 min, 24/7)':'https://buy.stripe.com/00waEXbTG6AacLs05j1Jm01',
     'Starter — $79/mo (14-day free trial)':'https://buy.stripe.com/6oU00j4re9Mm6n4g4h1Jm03',
     'Pro — $149/mo (14-day free trial)':'https://buy.stripe.com/8x27sL6zme2C3aS19n1Jm02',
     'Crew — $249/mo (14-day free trial)':'https://buy.stripe.com/14AeVd7DqcYycLs05j1Jm00',
@@ -252,7 +252,7 @@ document.getElementById('c-out').innerHTML='Estimated value of those calls: <str
     return base;
   }
   function syncAllFormsNext(){
-    var curPlan=(planInp&&planInp.value)||(sel&&sel.value)||'Pro — $99/mo (November Special · 250 min, 24/7)';
+    var curPlan=(planInp&&planInp.value)||(sel&&sel.value)||'Pro — $99/mo (November Special · 400 min, 24/7)';
     document.querySelectorAll('form.cb-step1-form').forEach(function(f){
       var nextInp=f.elements['_next']||f.querySelector('input[name="_next"]');
       var emailInp=f.elements['email']||f.querySelector('input[name="email"]');
