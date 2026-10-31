@@ -1,5 +1,15 @@
 (function(){
   var NS=(location.hostname==='callbassador.com'&&!/[?&]cbtest=1/.test(location.search))?'callbassador-com':'callbassador-test', API='https://abacus.jasoncameron.dev/hit/'+NS+'/';
+  // Oct 31 2026: test mode (cbtest=1 in URL, or remembered in sessionStorage for the tab) skips ALL counting.
+  var TEST=/[?&]cbtest=1(&|$)/.test(location.search);
+  try{ if(TEST){sessionStorage.setItem('cb_test','1');}else if(sessionStorage.getItem('cb_test')==='1'){TEST=true;} }catch(e){}
+  function day(){
+    try{var p=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',month:'2-digit',day:'2-digit'}).formatToParts(new Date()),m='',d='';
+      for(var i=0;i<p.length;i++){if(p[i].type==='month')m=p[i].value;if(p[i].type==='day')d=p[i].value;}
+      if(m&&d)return m+d;}catch(e){}
+    return '';
+  }
+  var DAY=day();
   var OK={a5_price_anchor:1,a2_money:1,a1_pain:1};
   function utm(){
     var u='';
@@ -16,15 +26,23 @@
     if(p.indexOf('$249')!==-1||p.indexOf('14AeVd7DqcYycLs05j1Jm00')!==-1)return 'crew249';
     return 'pro99';
   }
-  function hit(k){
+  function hit1(k){
     var url=API+k.slice(0,64);
     try{ if(window.fetch){fetch(url,{method:'GET',mode:'no-cors',keepalive:true,credentials:'omit'}).catch(function(){});return;} }catch(e){}
     try{(new Image()).src=url;}catch(e){}
   }
+  // Every event also counts a dated copy (key__MMDD, America/New_York) for daily numbers.
+  function hit(k){ if(TEST)return; hit1(k); if(DAY)hit1(k.slice(0,58)+'__'+DAY); }
   function ev(name,extra){ var u=utm(); hit(name+'__'+(extra?extra+'__':'')+u); }
   window.cbTrack=ev;
   var U=utm();
   ev('visit');
+  if(/(^|\/)thanks\.html$/.test(location.pathname)||/(^|\/)thanks\/?$/.test(location.pathname))ev('thanks');
+  // First focus/input on the Step 1 form, once per page load.
+  var started=false;
+  function st(e){ try{ if(started)return; var f=e.target&&e.target.closest&&e.target.closest('form.cb-step1-form'); if(!f)return; started=true; ev('step1_start'); }catch(x){} }
+  document.addEventListener('focusin',st,true);
+  document.addEventListener('input',st,true);
   document.addEventListener('submit',function(e){
     try{var f=e.target; if(!f||!f.classList||!f.classList.contains('cb-step1-form'))return;
       var p=(f.elements['plan']&&f.elements['plan'].value)||'';
@@ -62,7 +80,10 @@
       var ctl=window.AbortController?new AbortController():null;
       setTimeout(function(){ if(ctl){try{ctl.abort();}catch(x){}} go(); },4000);
       fetch(act.replace('formsubmit.co/','formsubmit.co/ajax/'),{method:'POST',body:new FormData(f),headers:{'Accept':'application/json'},signal:ctl?ctl.signal:undefined})
-        .then(function(r){ if(!r||!r.ok)hit('step1_fs_fail__'+U); go(); },function(){ hit('step1_fs_fail__'+U); go(); });
+        .then(function(r){
+          if(!r||!r.ok){hit('step1_fs_fail__'+U); go(); return;}
+          return r.json().then(function(j){ if(!j||j.success===false||j.success==='false')hit('step1_fs_fail__'+U); go(); },function(){ go(); });
+        },function(){ hit('step1_fs_fail__'+U); go(); });
     }catch(x){}
   },false);
 })();
