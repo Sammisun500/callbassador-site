@@ -62,7 +62,7 @@
   if(location.hash==='#talk-to-sami'||/[?&]talk=1(&|$)/.test(location.search))ev('talk_to_sami_open');
   var played=false;
   document.addEventListener('play',function(e){
-    try{var t=e.target; if(!played&&t&&t.tagName==='AUDIO'&&(t.currentSrc||t.src||'').indexOf('sample')!==-1){played=true;ev('sample_audio_play');}}catch(x){}
+    try{var t=e.target; if(!played&&t&&t.tagName==='AUDIO'&&(t.currentSrc||t.src||'').indexOf('sample')!==-1){played=true;ev('sample_audio_play');ev('sample_play',(t.getAttribute('data-sample-tag')||'other').replace(/[^a-z0-9_-]/gi,'').slice(0,12));}}catch(x){}
   },true);
   // Oct 30 2026: resilient Step 1 submit. Sends the lead to FormSubmit in the background
   // and always continues to Stripe checkout, even if FormSubmit is slow or down.
