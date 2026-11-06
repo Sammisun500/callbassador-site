@@ -11,10 +11,36 @@
   }
   var DAY=day();
   var OK={a5_price_anchor:1,a2_money:1,a1_pain:1};
+  var UTM_KEYS=['utm_source','utm_medium','utm_campaign','utm_content','utm_term'];
+  function captureUtms(){
+    var out={};
+    try{
+      var q=new URLSearchParams(location.search);
+      var found=false;
+      for(var i=0;i<UTM_KEYS.length;i++){
+        var k=UTM_KEYS[i], v=(q.get(k)||'').trim();
+        if(v){out[k]=v.slice(0,80); found=true;}
+      }
+      if(found){
+        try{sessionStorage.setItem('cb_utm_params',JSON.stringify(out));}catch(e){}
+      }else{
+        try{out=JSON.parse(sessionStorage.getItem('cb_utm_params')||'{}')||{};}catch(e){out={};}
+      }
+    }catch(e){out={};}
+    return out;
+  }
+  var UTM_PARAMS=captureUtms();
   function utm(){
     var u='';
-    try{var q=new URLSearchParams(location.search);u=(q.get('utm_content')||'').toLowerCase().replace(/[^a-z0-9_]/g,'');
-      if(u){sessionStorage.setItem('cb_utm_content',u);}else{u=sessionStorage.getItem('cb_utm_content')||'';}}catch(e){}
+    try{
+      u=((UTM_PARAMS.utm_content||'')||'').toLowerCase().replace(/[^a-z0-9_]/g,'');
+      if(!u){
+        var q=new URLSearchParams(location.search);u=(q.get('utm_content')||'').toLowerCase().replace(/[^a-z0-9_]/g,'');
+        if(u){sessionStorage.setItem('cb_utm_content',u);}else{u=sessionStorage.getItem('cb_utm_content')||'';}
+      }else{
+        try{sessionStorage.setItem('cb_utm_content',u);}catch(e){}
+      }
+    }catch(e){}
     if(!u)return 'none';
     return OK[u]?u:'other';
   }
@@ -35,6 +61,37 @@
   function hit(k){ if(TEST)return; hit1(k); if(DAY)hit1(k.slice(0,58)+'__'+DAY); }
   function ev(name,extra){ var u=utm(); hit(name+'__'+(extra?extra+'__':'')+u); }
   window.cbTrack=ev;
+  function meta(eventName, params, custom){
+    try{
+      if(typeof window.fbq!=='function')return;
+      if(custom){ window.fbq('trackCustom', eventName, params||{}); }
+      else{ window.fbq('track', eventName, params||{}); }
+    }catch(e){}
+  }
+  function appendStripeAttribution(url){
+    try{
+      if(!url||url.indexOf('buy.stripe.com')===-1)return url;
+      var u=new URL(url);
+      var params=UTM_PARAMS||{};
+      for(var i=0;i<UTM_KEYS.length;i++){
+        var k=UTM_KEYS[i];
+        if(params[k]&&!u.searchParams.get(k))u.searchParams.set(k,params[k]);
+      }
+      if(!u.searchParams.get('client_reference_id')){
+        var parts=[];
+        for(var j=0;j<UTM_KEYS.length;j++){
+          var kk=UTM_KEYS[j];
+          if(params[kk])parts.push(kk.replace('utm_','')+'='+String(params[kk]).slice(0,24));
+        }
+        if(parts.length){
+          var ref=parts.join('|').slice(0,200);
+          u.searchParams.set('client_reference_id',ref);
+        }
+      }
+      return u.toString();
+    }catch(e){ return url; }
+  }
+  window.cbAppendStripeAttribution=appendStripeAttribution;
   var U=utm();
   ev('visit');
   if(/(^|\/)thanks\.html$/.test(location.pathname)||/(^|\/)thanks\/?$/.test(location.pathname))ev('thanks');
@@ -48,22 +105,73 @@
       var p=(f.elements['plan']&&f.elements['plan'].value)||'';
       var n=(f.elements['_next']&&f.elements['_next'].value)||'';
       var s=planSlug(p||n); ev('step1_submit',s);
-      if(n.indexOf('https://buy.stripe.com/')===0)ev('checkout_redirect',planSlug(n));
+      if(n.indexOf('https://buy.stripe.com/')===0){
+        ev('checkout_redirect',planSlug(n));
+        meta('InitiateCheckout',{content_name:s,currency:'USD',value:0});
+      }else{
+        // Demo-only path still counts as starting checkout intent for Meta
+        meta('InitiateCheckout',{content_name:s||'demo',currency:'USD',value:0});
+      }
     }catch(x){}
   },false);
   document.addEventListener('click',function(e){
-    try{var a=e.target&&e.target.closest&&e.target.closest('a,button'); if(!a)return;
+    try{
+      var t=e.target;
+      // "Chat with Sami" Retell FAB / widget root
+      if(t&&t.closest&&(t.closest('#retell-widget-root')||t.closest('[data-fab-text]')||t.closest('#retell-widget'))){
+        ev('chat_with_sami_click');
+        meta('Contact',{content_name:'Chat with Sami'});
+      }
+      var a=t&&t.closest&&t.closest('a,button'); if(!a)return;
       var h=a.getAttribute('href')||'';
-      if(h.indexOf('buy.stripe.com')!==-1)ev('checkout_redirect',planSlug(h));
+      if(h.indexOf('buy.stripe.com')!==-1){
+        ev('checkout_redirect',planSlug(h));
+        meta('InitiateCheckout',{content_name:planSlug(h),currency:'USD',value:0});
+        var attributed=appendStripeAttribution(h);
+        if(attributed!==h){ a.setAttribute('href',attributed); }
+      }
       if(h.indexOf('tel:')===0)ev('call_link_tap');
-      if(a.hasAttribute('data-talk-sami')||h==='#talk-to-sami'||h.indexOf('?talk=1')!==-1)ev('talk_to_sami_open');
+      if(a.hasAttribute('data-talk-sami')||h==='#talk-to-sami'||h.indexOf('?talk=1')!==-1){
+        ev('talk_to_sami_open');
+        meta('Contact',{content_name:'Talk to Sami voice demo'});
+      }
     }catch(x){}
   },true);
-  if(location.hash==='#talk-to-sami'||/[?&]talk=1(&|$)/.test(location.search))ev('talk_to_sami_open');
+  if(location.hash==='#talk-to-sami'||/[?&]talk=1(&|$)/.test(location.search)){
+    ev('talk_to_sami_open');
+    meta('Contact',{content_name:'Talk to Sami voice demo'});
+  }
   var played=false;
   document.addEventListener('play',function(e){
-    try{var t=e.target; if(!played&&t&&t.tagName==='AUDIO'&&(t.currentSrc||t.src||'').indexOf('sample')!==-1){played=true;ev('sample_audio_play');ev('sample_play',(t.getAttribute('data-sample-tag')||'other').replace(/[^a-z0-9_-]/gi,'').slice(0,12));}}catch(x){}
+    try{var t=e.target; if(!played&&t&&t.tagName==='AUDIO'&&(t.currentSrc||t.src||'').indexOf('sample')!==-1){
+      played=true;
+      var tag=(t.getAttribute('data-sample-tag')||'other').replace(/[^a-z0-9_-]/gi,'').slice(0,12);
+      ev('sample_audio_play');
+      ev('sample_play',tag);
+      meta('SampleAudioPlay',{content_name:tag||'sample'},true);
+    }}catch(x){}
   },true);
+  // ViewContent once when pricing section is seen
+  function watchPricing(){
+    try{
+      var el=document.getElementById('pricing');
+      if(!el||!window.IntersectionObserver)return;
+      var seen=false;
+      var io=new IntersectionObserver(function(entries){
+        for(var i=0;i<entries.length;i++){
+          if(entries[i].isIntersecting&&!seen){
+            seen=true;
+            ev('pricing_view');
+            meta('ViewContent',{content_name:'pricing',content_category:'plans',currency:'USD',value:0});
+            try{io.disconnect();}catch(e){}
+          }
+        }
+      },{threshold:0.35});
+      io.observe(el);
+    }catch(e){}
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',watchPricing);
+  else watchPricing();
   // Oct 30 2026: resilient Step 1 submit. Sends the lead to FormSubmit in the background
   // and always continues to Stripe checkout, even if FormSubmit is slow or down.
   document.addEventListener('submit',function(e){
@@ -75,6 +183,8 @@
       e.preventDefault();
       var em=(f.elements['email']&&f.elements['email'].value)||'';
       if(em&&next.indexOf('buy.stripe.com')!==-1&&next.indexOf('prefilled_email=')===-1)next+=(next.indexOf('?')===-1?'?':'&')+'prefilled_email='+encodeURIComponent(em);
+      next=appendStripeAttribution(next);
+      try{ if(f.elements['_next']) f.elements['_next'].value=next; }catch(err){}
       var btn=f.querySelector('button[type=submit],input[type=submit],button:not([type])'); if(btn){btn.disabled=true;}
       var done=false; function go(){ if(done)return; done=true; location.href=next; }
       var ctl=window.AbortController?new AbortController():null;
