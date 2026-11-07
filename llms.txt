@@ -5,7 +5,7 @@
 - Answers inbound calls and texts 24/7, answers FAQs, flags emergencies, takes the caller's details and texts the owner a summary. Appointment booking (Google Calendar; Jobber planned) is on Pro and Crew plans only.
 - Inbound only: never makes outbound sales calls or robocalls.
 - Every call opens with a recording notice (all-party-consent compliance).
-- Setup is done for the business, usually within 24-48 hours; they forward calls to their Callbassador number.
+- Setup is done for the business; they forward calls to their Callbassador number.
 
 ## Pricing (USD/month)
 - Starter $79: 150 minutes
