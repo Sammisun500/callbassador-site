@@ -101,4 +101,15 @@ footer .chatnote{margin:18px auto 0;max-width:1120px;padding:0 20px}
 @media(max-width:700px){
   .wizard{padding-top:28px}
 }
+.pro-offer{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.price .pro-offer{justify-content:center;margin:8px 0 10px}
+.cb-pl-p.pro-offer{justify-content:flex-end}
+.price-was{color:#7a8499;text-decoration:line-through;font-weight:600;font-size:1.35rem}
+.price .price-was{font-size:1.7rem}
+.price-now{display:inline-block;background:#F09A2E;color:#0a1a3f;font-weight:800;border-radius:999px;padding:6px 12px;font-size:.95rem;line-height:1.2}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.trial-note{font-size:.78rem;line-height:1.45;color:#55607a;margin:8px 0 0;max-width:640px}
+.price .trial-note{text-align:left}
+.hero .trial-note{color:#d7def0}
+.cb-wizard .trial-note{color:#334}
 /*preview-ia-end*/

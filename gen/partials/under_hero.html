@@ -27,7 +27,7 @@
 <div class="cb-step-copy">
 <p class="cb-kicker">Step 1</p>
 <h3>Tell us about your shop</h3>
-<p>Your name, business, trade, mobile, and email, plus how you want call alerts. About two minutes on this site.</p>
+<p>Your name, business, trade, mobile, and email, plus how you want call alerts. A short form on this site.</p>
 </div>
 </div>
 <div class="cb-step-row">
@@ -89,7 +89,7 @@ __TALK_LIGHT__
 <p class="cb-kicker">Step 1 — Your shop</p>
 <label>Your name *<input name="name" data-req="1" autocomplete="name" placeholder="Alex Romero"></label>
 <label>Business name *<input name="business_name" data-req="1" autocomplete="organization" placeholder="Liberty Plumbing"></label>
-<label>Mobile (for call alerts) *<input name="phone" type="tel" data-req="1" autocomplete="tel" placeholder="(484) 555-0176"></label>
+<label>Mobile (for call alerts) *<input name="phone" type="tel" data-req="1" autocomplete="tel" placeholder="Mobile number"></label>
 <label>Email *<input name="email" type="email" data-req="1" autocomplete="email" placeholder="alex@example.com"></label>
 <label class="full">Trade *<select name="trade" data-req="1"><option value="">Choose…</option><option>Plumbing</option><option>HVAC</option><option>Electrical</option><option>Roofing</option><option>Landscaping</option><option>General contracting</option><option>Cleaning / maid / janitorial</option><option>Other home services</option></select></label>
 <div class="full wiz-actions"><button class="btn" type="button" data-wiz-next="1">Continue</button></div>
@@ -99,11 +99,11 @@ __TALK_LIGHT__
 <fieldset class="full cb-plans">
 <legend>Choose your plan <span>14-day free trial on every plan. $0.00 due today.</span></legend>
 <label class="cb-pl"><input type="radio" name="cb_plan_choice" value="Starter — $79/mo (14-day free trial)"><span class="cb-pl-b"><strong>Starter</strong><span class="cb-pl-p">$79/mo</span><small>150 minutes, 24/7 answering, call summaries</small></span></label>
-<label class="cb-pl"><input type="radio" name="cb_plan_choice" value="Pro — $99/mo (November Special · 400 min, 24/7)" checked><span class="cb-pl-b"><strong>Pro</strong><span class="cb-pl-p"><s>$149</s> $99/mo</span><small>$99/mo for your first 12 months when you start in November, then $149/mo. 400 minutes and appointment booking.</small></span></label>
+<label class="cb-pl"><input type="radio" name="cb_plan_choice" value="Pro — $99/mo (November Special · 400 min, 24/7)" checked><span class="cb-pl-b"><strong>Pro</strong><span class="cb-pl-p pro-offer"><span class="sr-only">Regular price $149 per month, now $99 per month November special</span><s class="price-was">$149/mo</s><span class="price-now">$99 November Special</span></span><small>$99/mo for your first 12 months when you start in November, then $149/mo.</small><small>400 minutes and appointment booking.</small></span></label>
 <label class="cb-pl"><input type="radio" name="cb_plan_choice" value="Crew — $249/mo (14-day free trial)"><span class="cb-pl-b"><strong>Growth (Crew)</strong><span class="cb-pl-p">$249/mo</span><small>800 minutes, booking, multiple techs and calendars</small></span></label>
 </fieldset>
 <label class="full">How should calls reach Sami? *<select name="call_alerts" data-req="1"><option value="">Choose…</option><option>Missed calls only</option><option>After-hours calls</option><option>All calls</option></select></label>
-<p class="full note" style="color:#334">Sami is an AI receptionist. Calls may be recorded. Every call starts with a recording notice.</p>
+<p class="full note" style="color:#334">Sami is an AI receptionist. Every call plays a short notice that the call may be recorded.</p>
 <div class="full wiz-actions">
 <button class="btn" type="button" data-wiz-next="2">Continue</button>
 <button class="btn line cb-demo-path" type="button">Prefer a free custom demo first</button>
@@ -129,7 +129,7 @@ __TALK_LIGHT__
 <button class="btn line cb-demo-path" type="button">Prefer a free custom demo first</button>
 <button class="wiz-back" type="button" data-wiz-back="1">Back</button>
 </div>
-<p class="full note">By submitting, you agree to receive setup and call-alert texts and emails from Callbassador (reply STOP to opt out; <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a>). The recorded example call stays on this page if you want to listen first.</p>
+<p class="full note">By submitting, you ask Callbassador to email you about this signup and, if you start a trial, to send setup messages and call-alert texts to the mobile number you entered for those alerts (message/data rates may apply; reply STOP to opt out). This is not consent for marketing calls, robocalls, or unrelated marketing texts. See <a href="privacy.html">Privacy Policy</a>.</p>
 </div>
 </form>
 <script src="__WIZARD_JS__"></script>
@@ -145,7 +145,7 @@ __TALK_LIGHT__
 <div class="sms-top"><span class="cb-exlabel">Example</span><br>Text to the owner · 9:16 p.m.</div>
 <div class="sms-body">
 <p><strong>Liberty Plumbing</strong><br>From Sami, AI receptionist</p>
-<p><strong>Emergency — supply line leak</strong><br>Alex Romero (fictional)<br>(484) 555-0176<br>90 Summit Ave, Exton, PA</p>
+<p><strong>Emergency — supply line leak</strong><br>Alex Romero (fictional)<br>Callback number on file<br>90 Summit Ave, Exton, PA</p>
 <p>Water heater supply line leaking in the utility room. Caller shut the valve. Asked for a callback. You choose when to call.</p>
 </div>
 </article>
@@ -153,7 +153,7 @@ __TALK_LIGHT__
 <div class="sum-top"><span class="cb-exlabel">Example</span><br>Call summary · Liberty Plumbing</div>
 <div class="sum-body">
 <p><strong>Caller:</strong> Alex Romero (fictional)<br>
-<strong>Number:</strong> (484) 555-0176<br>
+<strong>Number:</strong> Callback number on file<br>
 <strong>When:</strong> Tuesday, 9:14 p.m.<br>
 <strong>Reason:</strong> Water heater supply line leaking<br>
 <strong>Address:</strong> 90 Summit Ave, Exton, PA<br>

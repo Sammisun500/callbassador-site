@@ -49,7 +49,7 @@ POST_ORDER = [
     "answering-service-cost.html",
 ]
 
-PIXEL = """<!-- Meta Pixel Code --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','2107351423234410');fbq('track','PageView');</script><noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/tr?id=2107351423234410&ev=PageView&noscript=1"/></noscript><!-- End Meta Pixel Code -->"""
+PIXEL = """<script>if(navigator.globalPrivacyControl===true){window.fbq=function(){};}</script><!-- Meta Pixel Code --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','2107351423234410');fbq('track','PageView');</script><noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/tr?id=2107351423234410&ev=PageView&noscript=1"/></noscript><!-- End Meta Pixel Code -->"""
 
 RETELL = """<script id="retell-widget" src="https://dashboard.retellai.com/retell-widget-v2.js" type="module" data-public-key="public_key_a72c1c071b62a97efde23" data-agent-id="agent_91a86fc78b06f0d54aa6a615e5" data-title="Chat with Callbassador" data-bot-name="Sami (AI assistant)" data-color="#10275A" data-fab-text="Chat with Sami" data-logo-url="https://callbassador.com/assets/mark-c.png" data-white-label="rT_1c6e4d9g8i0a5b3f2j7h_kL"></script>"""
 
@@ -111,7 +111,7 @@ def make_nav(prefix: str, on_home: bool) -> str:
 def make_footer(prefix: str) -> str:
     p = prefix
     return f"""<footer><div class="wrap fcols">
-<div><img src="{p}assets/logo-full-reversed.png" alt="Callbassador" width="551" height="104"><p>Catch every call. Catch every job.<br>Home-service businesses in all 50 states.<br>Callbassador LLC, a Pennsylvania LLC<br>64 E Uwchlan Ave, Suite 241, Exton, PA 19341<br><a href="mailto:hello@callbassador.com">hello@callbassador.com</a></p><p>Sami is an AI receptionist.</p></div>
+<div><img src="{p}assets/logo-full-reversed.png" alt="Callbassador" width="551" height="104"><p>Answers the inbound calls you forward, and texts you the details.<br>Home-service businesses in all 50 states.<br>Callbassador LLC, a Pennsylvania LLC<br>64 E Uwchlan Ave, Suite 241, Exton, PA 19341<br><a href="mailto:hello@callbassador.com">hello@callbassador.com</a></p><p>Sami is an AI receptionist.</p></div>
 <div><h2>Trades</h2><ul>
 <li><a href="{p}answering-service/">All trades and areas</a></li>
 <li><a href="{p}answering-service/plumbers-philadelphia.html">Plumbers in Philadelphia</a></li>
@@ -461,6 +461,134 @@ def visible(page: str) -> str:
     return page
 
 
+DEFAULT_DESC = (
+    "Done-for-you AI receptionist for home-service businesses. "
+    "Sami answers the inbound calls you forward and texts you the details. "
+    "Plans from $79/mo. 14-day trial."
+)
+TRIAL_NOTE = (
+    '<p class="trial-note">Card required; $0 due today. 14-day free trial. '
+    "Plans start at $79/month, plus applicable tax, and auto-renew monthly after the trial "
+    "unless you cancel before it ends. For cancellation help, email "
+    '<a href="mailto:hello@callbassador.com">hello@callbassador.com</a>.</p>'
+)
+AI_FAQ = (
+    "Sami is an AI receptionist, not a person. She doesn't claim to be human, and if a caller asks, "
+    "she tells them she's an AI."
+)
+RECORDING = (
+    "Every call plays a short notice that the call may be recorded. Recording and transcription "
+    "should begin only after the required notice and any required consent for that call. "
+    "This page is not a warranty of all-party-consent compliance in every state."
+)
+
+
+def apply_marketing(page: str) -> str:
+    """Sitewide copy fixes that must survive a rebuild from gen/src."""
+    def swap_desc(match: re.Match) -> str:
+        content = match.group(2)
+        if "Never miss" in content:
+            return match.group(1) + DEFAULT_DESC + match.group(3)
+        return match.group(0)
+
+    page = re.sub(r'(<meta name="description" content=")([^"]*)(")', swap_desc, page)
+    page = re.sub(r'(<meta property="og:description" content=")([^"]*)(")', swap_desc, page)
+    page = re.sub(r'("description": ")Never miss[^"]*', r"\1" + DEFAULT_DESC, page)
+    page = page.replace(
+        '"slogan":"Catch every call. Catch every job."',
+        '"slogan":"Answers the inbound calls you forward, and texts you the details."',
+    )
+    page = page.replace(
+        "Sami greets callers naturally by name. If anyone asks whether they're talking to a person or AI, she always answers honestly that she's an AI assistant, and callers are told the call may be recorded. She never claims to be human. She's friendly and quick, and gets them helped.",
+        AI_FAQ,
+    )
+    page = page.replace(
+        "Sami greets callers naturally by name. If anyone asks whether they're talking to a person or AI, she always answers honestly that she's an AI assistant, and callers are told the call may be recorded.",
+        AI_FAQ,
+    )
+    page = page.replace("100% Transparent AI Disclosure", "AI if a caller asks")
+    page = page.replace(
+        "Polite upfront disclosure · Never pretends to be human",
+        "If a caller asks, she tells them she's an AI",
+    )
+    page = page.replace(
+        "Polite upfront disclosure &middot; Never pretends to be human",
+        "If a caller asks, she tells them she's an AI",
+    )
+    if "window.fbq=function(){};" not in page and "<!-- Meta Pixel Code -->" in page:
+        page = page.replace(
+            "<!-- Meta Pixel Code -->",
+            "<script>if(navigator.globalPrivacyControl===true){window.fbq=function(){};}</script><!-- Meta Pixel Code -->",
+            1,
+        )
+    page = page.replace(
+        "Yes. Every call opens with a notice that it may be recorded, as required in Pennsylvania and other all-party-consent states.",
+        RECORDING,
+    )
+    page = page.replace(
+        "Yes, for quality and so we can send you accurate summaries. Every call starts with a short notice that the call may be recorded. Pennsylvania and some other states require everyone on the call to agree, so we always announce it.",
+        RECORDING,
+    )
+    page = page.replace(
+        "Never miss a call while you're on a job. ",
+        "When you can't pick up on a job, ",
+    )
+    page = page.replace(
+        "Never miss a call because you're on a ladder, under a sink or behind the wheel. ",
+        "You might be on a ladder, under a sink, or behind the wheel. ",
+    )
+    page = page.replace(
+        "Never miss a call on the job. ",
+        "Calls come in while you are on the job. ",
+    )
+    page = page.replace(
+        "Microphone permission needed \\u00b7 Allow mic or call (610) 271-1725",
+        "Microphone permission needed. Allow mic access, or email hello@callbassador.com.",
+    )
+    page = page.replace(
+        "Microphone permission needed · Allow mic or call (610) 271-1725",
+        "Microphone permission needed. Allow mic access, or email hello@callbassador.com.",
+    )
+    page = page.replace(
+        "Connection ended \\u00b7 Tap to call again or dial (610) 271-1725",
+        "Connection ended. Try again, or email hello@callbassador.com.",
+    )
+    page = page.replace(
+        "Could not connect \\u00b7 Please try again or call (610) 271-1725",
+        "Could not connect. Please try again, or email hello@callbassador.com.",
+    )
+    page = page.replace(
+        "12. Best time for your 15-minute Go-Live &amp; Test Call with Samantha",
+        "12. Best time for a go-live check-in",
+    )
+    page = page.replace(
+        "12. Best time for your 15-minute Go-Live & Test Call with Samantha",
+        "12. Best time for a go-live check-in",
+    )
+    page = page.replace("placeholder=\"(610) 555-0147\"", "placeholder=\"Mobile number\"")
+    page = page.replace("placeholder=\"(610) 555-0199\"", "placeholder=\"Business number\"")
+    page = page.replace("(484) 555-0176", "callback number on file")
+    page = page.replace("610-555-0142", "a callback number")
+    # Header trial button stays compact; annotate trial links in the body.
+    parts = re.split(r"(</header>)", page, maxsplit=1)
+    if len(parts) == 3:
+        head, mid, rest = parts
+    else:
+        head, mid, rest = "", "", page
+    rest = re.sub(
+        r"(<a\b[^>]*>\s*Start 14-day free trial(?:\s*(?:&rarr;|→))?\s*</a>)(?!\s*<p class=\"trial-note\")",
+        r"\1" + TRIAL_NOTE,
+        rest,
+        flags=re.I,
+    )
+    rest = rest.replace(
+        '<button class="btn" type="submit">Continue to secure checkout</button>',
+        '<button class="btn" type="submit">Continue to secure checkout</button>' + TRIAL_NOTE,
+        1,
+    )
+    return head + mid + rest
+
+
 def scan(dist: Path) -> None:
     problems = []
     banned = [
@@ -518,6 +646,16 @@ def scan(dist: Path) -> None:
     hero = (dist / "index.html").read_text(encoding="utf-8")
     if SAMI_LAST_LINE not in hero:
         problems.append("homepage missing corrected Sami line")
+    phone_re = re.compile(r"(?:\(\d{3}\)\s*\d{3}-\d{4}|\b\d{3}-\d{3}-\d{4}\b|271-1725)")
+    for path in dist.rglob("*.html"):
+        raw = path.read_text(encoding="utf-8", errors="replace")
+        rel = str(path.relative_to(dist))
+        if "Samantha" in raw:
+            problems.append(f"{rel}: Samantha")
+        if phone_re.search(raw):
+            problems.append(f"{rel}: phone number")
+        if "Never miss" in raw:
+            problems.append(f"{rel}: Never miss")
     if problems:
         raise SystemExit("copy scan failed:\n" + "\n".join(problems))
 
@@ -591,6 +729,8 @@ def main() -> None:
     render_posts(dist)
     update_sitemap(dist)
     update_llms(dist)
+    for path in dist.rglob("*.html"):
+        path.write_text(apply_marketing(path.read_text(encoding="utf-8")), encoding="utf-8")
     scan(dist)
 
     for name in ("sami-sample-call.mp3", "sample-call.mp3"):
