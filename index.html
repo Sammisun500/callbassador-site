@@ -164,11 +164,11 @@ if(q.toLowerCase()==='a2_money'){var h=document.getElementById('cb-hero-h1');if(
 </ol>
 <form class="cb-step1-form cb-wizard" action="https://formsubmit.co/4f59e33d7ceb128dc1d680460bcda3e8" method="POST">
 <input type="hidden" name="_subject" value="New 14-Day Free Trial Signup (Step 1) — Callbassador">
-<input type="hidden" name="_next" value="https://buy.stripe.com/8x27sL6zme2C3aS19n1Jm02">
+<input type="hidden" name="_next" value="https://buy.stripe.com/00waEXbTG6AacLs05j1Jm01">
 <input type="hidden" name="_template" value="table">
 <input type="hidden" name="_captcha" value="false">
 <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
-<input type="hidden" name="plan" id="cb-plan-input" value="Pro — $149/mo (14-day free trial)">
+<input type="hidden" name="plan" id="cb-plan-input" value="Pro — $99/mo (November Special · 400 min, 24/7)">
 <input type="hidden" name="signup_path" value="trial">
 <div class="wiz-step" data-step="1">
 <p class="cb-kicker">Step 1 — Your shop</p>
@@ -184,7 +184,7 @@ if(q.toLowerCase()==='a2_money'){var h=document.getElementById('cb-hero-h1');if(
 <fieldset class="full cb-plans">
 <legend>Choose your plan <span>14-day free trial on every plan. $0.00 due today.</span></legend>
 <label class="cb-pl"><input type="radio" name="cb_plan_choice" value="Starter — $79/mo (14-day free trial)"><span class="cb-pl-b"><strong>Starter</strong><span class="cb-pl-p">$79/mo</span><small>150 minutes, 24/7 answering, call summaries</small></span></label>
-<label class="cb-pl"><input type="radio" name="cb_plan_choice" value="Pro — $149/mo (14-day free trial)" checked><span class="cb-pl-b"><strong>Pro</strong><span class="cb-pl-p">$149/mo</span><small>400 minutes and appointment booking</small></span></label>
+<label class="cb-pl"><input type="radio" name="cb_plan_choice" value="Pro — $99/mo (November Special · 400 min, 24/7)" checked><span class="cb-pl-b"><strong>Pro</strong><span class="cb-pl-p"><s>$149</s> $99/mo</span><small>$99/mo for your first 12 months when you start in November, then $149/mo. 400 minutes and appointment booking.</small></span></label>
 <label class="cb-pl"><input type="radio" name="cb_plan_choice" value="Crew — $249/mo (14-day free trial)"><span class="cb-pl-b"><strong>Growth (Crew)</strong><span class="cb-pl-p">$249/mo</span><small>800 minutes, booking, multiple techs and calendars</small></span></label>
 </fieldset>
 <label class="full">How should calls reach Sami? *<select name="call_alerts" data-req="1"><option value="">Choose…</option><option>Missed calls only</option><option>After-hours calls</option><option>All calls</option></select></label>
@@ -346,7 +346,7 @@ if(q.toLowerCase()==='a2_money'){var h=document.getElementById('cb-hero-h1');if(
       var v = a.getAttribute('data-plan')||'';
       if(v.indexOf('November')!==-1 || v.indexOf('$99')!==-1){
         offer = true;
-        var pro = form.querySelector('input[name="cb_plan_choice"][value="'+PRO_STD+'"]');
+        var pro = form.querySelector('input[name="cb_plan_choice"][value="'+PRO_OFFER+'"]');
         if(pro) pro.checked = true;
       } else if(v.indexOf('demo first')!==-1){
         offer = false;
@@ -364,7 +364,7 @@ if(q.toLowerCase()==='a2_money'){var h=document.getElementById('cb-hero-h1');if(
     var q = new URLSearchParams(location.search).get('plan')||'';
     if(q==='pro99'){
       offer = true;
-      var pro = form.querySelector('input[name="cb_plan_choice"][value="'+PRO_STD+'"]');
+      var pro = form.querySelector('input[name="cb_plan_choice"][value="'+PRO_OFFER+'"]');
       if(pro) pro.checked = true;
     }
   }catch(e){}

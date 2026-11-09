@@ -126,7 +126,7 @@
       var v = a.getAttribute('data-plan')||'';
       if(v.indexOf('November')!==-1 || v.indexOf('$99')!==-1){
         offer = true;
-        var pro = form.querySelector('input[name="cb_plan_choice"][value="'+PRO_STD+'"]');
+        var pro = form.querySelector('input[name="cb_plan_choice"][value="'+PRO_OFFER+'"]');
         if(pro) pro.checked = true;
       } else if(v.indexOf('demo first')!==-1){
         offer = false;
@@ -144,7 +144,7 @@
     var q = new URLSearchParams(location.search).get('plan')||'';
     if(q==='pro99'){
       offer = true;
-      var pro = form.querySelector('input[name="cb_plan_choice"][value="'+PRO_STD+'"]');
+      var pro = form.querySelector('input[name="cb_plan_choice"][value="'+PRO_OFFER+'"]');
       if(pro) pro.checked = true;
     }
   }catch(e){}

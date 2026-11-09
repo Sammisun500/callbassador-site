@@ -496,8 +496,17 @@ def scan(dist: Path) -> None:
             # Homepage may show it only inside the pricing section.
             if rel == "index.html":
                 outside = re.sub(r'<section class="alt" id="pricing">.*?</section>', " ", vis, flags=re.S)
+                outside = re.sub(r'<input\b[^>]*type="hidden"[^>]*>', " ", outside, flags=re.I)
+                # Owner exception: wizard step 2 Pro option may show the pricing-section November rate.
+                outside = re.sub(
+                    r'<label class="cb-pl"><input type="radio" name="cb_plan_choice" value="Pro — \$99/mo \(November Special.*?</label>',
+                    " ",
+                    outside,
+                    count=1,
+                    flags=re.S,
+                )
                 if "November Special" in outside or "$99" in outside:
-                    problems.append("index.html: $99 or November Special outside the pricing section")
+                    problems.append("index.html: $99 or November Special outside pricing and the step 2 Pro option")
             elif "$99" in vis or "November Special" in vis:
                 # Competitor price pages may cite PATLive's $99 plan. That is not our special.
                 if "PATLive" in vis and "November Special" not in vis:
