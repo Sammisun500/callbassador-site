@@ -47,6 +47,13 @@
     var email = (form.elements.email && form.elements.email.value) || '';
     if(nextInp) nextInp.value = destination(plan, email);
     if(pathInp) pathInp.value = (plan===DEMO) ? 'free_demo' : 'trial';
+    var proNote = document.getElementById('wiz-trial-pro');
+    var genNote = document.getElementById('wiz-trial-general');
+    if(proNote && genNote){
+      var isOffer = plan === PRO_OFFER;
+      proNote.hidden = !isOffer;
+      genNote.hidden = isOffer;
+    }
   }
   function visibleLabel(plan){
     if(plan===PRO_OFFER) return 'Pro — price shown in the pricing section, then confirmed on Stripe';

@@ -472,6 +472,12 @@ TRIAL_NOTE = (
     "unless you cancel before it ends. For cancellation help, email "
     '<a href="mailto:hello@callbassador.com">hello@callbassador.com</a>.</p>'
 )
+PRO_DISCLOSURE = (
+    "$99/month for your first 12 months (November sign-ups only), then $149/month, "
+    "plus applicable tax. 14-day free trial; card required, $0 due today; "
+    "auto-renews monthly unless you cancel before the trial ends."
+)
+PRO_NOTE = f'<p class="trial-note">{PRO_DISCLOSURE}</p>'
 AI_FAQ = (
     "Sami is an AI receptionist, not a person. She doesn't claim to be human, and if a caller asks, "
     "she tells them she's an AI."
@@ -575,17 +581,22 @@ def apply_marketing(page: str) -> str:
         head, mid, rest = parts
     else:
         head, mid, rest = "", "", page
+    def trial_after_link(match: re.Match) -> str:
+        tag = match.group(1)
+        # The $99 Stripe plan gets the price-increase sentence instead of the general note.
+        if "November Special" in tag or NOV_URL in tag:
+            return tag + PRO_NOTE
+        return tag + TRIAL_NOTE
+
     rest = re.sub(
         r"(<a\b[^>]*>\s*Start 14-day free trial(?:\s*(?:&rarr;|→))?\s*</a>)(?!\s*<p class=\"trial-note\")",
-        r"\1" + TRIAL_NOTE,
+        trial_after_link,
         rest,
         flags=re.I,
     )
-    rest = rest.replace(
-        '<button class="btn" type="submit">Continue to secure checkout</button>',
-        '<button class="btn" type="submit">Continue to secure checkout</button>' + TRIAL_NOTE,
-        1,
-    )
+    continue_btn = '<button class="btn" type="submit">Continue to secure checkout</button>'
+    if 'id="wiz-trial-pro"' not in rest:
+        rest = rest.replace(continue_btn, continue_btn + TRIAL_NOTE, 1)
     return head + mid + rest
 
 
@@ -625,9 +636,16 @@ def scan(dist: Path) -> None:
             if rel == "index.html":
                 outside = re.sub(r'<section class="alt" id="pricing">.*?</section>', " ", vis, flags=re.S)
                 outside = re.sub(r'<input\b[^>]*type="hidden"[^>]*>', " ", outside, flags=re.I)
-                # Owner exception: wizard step 2 Pro option may show the pricing-section November rate.
+                # Owner exception: wizard step 2 Pro option and step 3 (Pro selected) may show the November rate.
                 outside = re.sub(
                     r'<label class="cb-pl"><input type="radio" name="cb_plan_choice" value="Pro — \$99/mo \(November Special.*?</label>',
+                    " ",
+                    outside,
+                    count=1,
+                    flags=re.S,
+                )
+                outside = re.sub(
+                    r'<p class="trial-note" id="wiz-trial-pro">.*?</p>',
                     " ",
                     outside,
                     count=1,
