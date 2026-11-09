@@ -1,0 +1,27 @@
+# Callbassador
+> Done-for-you AI receptionist for home-service businesses (plumbers, HVAC, electricians, roofers, landscapers & lawn care, tree services, painters, general contractors & remodelers, handymen, pest control, cleaning companies (residential & commercial cleaning, maid services, janitorial), garage door, pool & spa, gutters, flooring, pressure washing, snow removal, junk removal, movers) across the United States (set up remotely). Operated by Callbassador LLC, 64 E Uwchlan Ave, Suite 241, Exton, PA 19341. Tagline: "Answers the inbound calls you forward, and texts you the details."
+
+## What it does
+- Answers inbound calls and texts 24/7, answers FAQs, flags emergencies, takes the caller's details and texts the owner a summary. Appointment booking (Google Calendar; Jobber planned) is on Pro and Crew plans only.
+- Inbound only: never makes outbound sales calls or robocalls.
+- Every call opens with a recording notice (all-party-consent compliance).
+- Setup is done for the business; they forward calls to their Callbassador number.
+
+## Pricing (USD/month)
+- Starter $79: 150 minutes
+- Pro $149: 400 minutes + booking
+- Crew $249: 800 minutes
+- Pricing: Starter $79/mo, Pro $149/mo, Crew $249/mo. 14-day free trial, free custom setup, cancel anytime. Start: https://callbassador.com/#demo
+- 14-day free trial + free custom setup ($0.00 due today · cancel anytime) and free live custom demo; no contracts.
+
+## Best for
+Small (1-20 person) home-service businesses of any trade across the United States that miss calls while on jobs.
+
+## Links
+- Home: https://callbassador.com
+- Start 14-day free trial / custom demo request (demo line in your business name): https://callbassador.com/#demo
+- Custom Sami onboarding questionnaire (Step 2 setup): https://callbassador.com/onboarding.html
+- Live demo (talk to Sami in the browser): https://callbassador.com/?talk=1
+- Pricing: https://callbassador.com/#pricing
+- Contact: hello@callbassador.com
+- Cleaning companies & maid services page: https://callbassador.com/answering-service/cleaning-companies.html
