@@ -192,7 +192,13 @@
       fetch(act.replace('formsubmit.co/','formsubmit.co/ajax/'),{method:'POST',body:new FormData(f),headers:{'Accept':'application/json'},signal:ctl?ctl.signal:undefined})
         .then(function(r){
           if(!r||!r.ok){hit('step1_fs_fail__'+U); go(); return;}
-          return r.json().then(function(j){ if(!j||j.success===false||j.success==='false')hit('step1_fs_fail__'+U); go(); },function(){ go(); });
+          return r.json().then(function(j){
+            if(!j||j.success===false||j.success==='false'){hit('step1_fs_fail__'+U); go(); return;}
+            if(next.indexOf('buy.stripe.com')===-1 && navigator.globalPrivacyControl!==true && typeof window.fbq==='function'){
+              try{window.fbq('track','Lead',{value:0,currency:'USD'});}catch(e){}
+            }
+            go();
+          },function(){ go(); });
         },function(){ hit('step1_fs_fail__'+U); go(); });
     }catch(x){}
   },false);
