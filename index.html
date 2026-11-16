@@ -33,7 +33,7 @@
 <meta name="google-site-verification" content="92gxx1w5qIXZvOTAhNHDHLDitZpcf46zaI1guJYBl18" />
 <script>if(navigator.globalPrivacyControl===true){window.fbq=function(){};}</script><!-- Meta Pixel Code --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','2107351423234410');fbq('track','PageView');</script><noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/tr?id=2107351423234410&ev=PageView&noscript=1"/></noscript><!-- End Meta Pixel Code -->
 <style>
-.rv-hero{padding:72px 0 80px}.rv-eyebrow{text-transform:uppercase;letter-spacing:.12em;font-size:.78rem;color:#9fb3dc;margin:0 0 12px}
+.rv-hero{padding:72px 0 80px}.rv-eyebrow{text-transform:none;letter-spacing:.12em;font-size:.78rem;color:#9fb3dc;margin:0 0 12px}
 .rv-cta{display:flex;flex-wrap:wrap;align-items:center;gap:18px;margin:28px 0 14px}.rv-link{color:#fff;opacity:.85;text-decoration:underline;text-underline-offset:3px}
 .rv-fine{color:#aebbd8;font-size:.92rem;margin:0}.rv-card{max-width:380px;justify-self:end}
 .rv-feat .card h3{margin-top:0}.rv-about{max-width:760px}.rv-about p{font-size:1.05rem;line-height:1.65}.rv-who{list-style:none;padding:0;margin:14px 0;line-height:1.9}
@@ -41,7 +41,7 @@
 @media(max-width:600px){.rv-hero{padding:40px 0 48px}.rv-hero h1{font-size:2.3rem}.rv-cta{flex-direction:column;align-items:stretch;gap:12px}.rv-cta .btn{text-align:center}.rv-link{text-align:center}.rv-fine{text-align:center}.rv-card{display:none}}
 .rv-final{padding:56px 0}.stats .cards{grid-template-columns:repeat(3,1fr)}@media(max-width:600px){.stats .card.stat{padding:16px}.stats .big{font-size:2rem}.stats .cards{grid-template-columns:1fr}}
 </style>
-<style>.cb-sample{margin:18px 0 14px;padding:14px 16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:12px}.cb-sample-h{margin:0 0 10px;font-weight:700;font-size:1.05rem}.cb-sample audio{width:100%;display:block}.cb-sample-cap{margin:8px 0 0;font-size:.85rem;opacity:.85}</style>
+<style>.cb-sample{margin:18px 0 14px;padding:14px 16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:12px}.cb-sample-h{margin:0 0 10px;font-weight:700;font-size:1.05rem}.cb-sample audio{width:100%;display:block}.cb-sample-cap{margin:8px 0 0;font-size:.85rem;opacity:.95;line-height:1.4}.ex-label{font-size:.78rem;font-weight:700;letter-spacing:.04em;color:#b45309;margin:0 0 8px}</style>
 <style>.cb-plans{border:0;padding:0;margin:4px 0;display:grid;gap:8px}.cb-plans legend{font-weight:700;margin-bottom:8px}.cb-plans legend span{display:block;font-weight:400;font-size:.85rem;opacity:.75}.cb-pl{display:flex;gap:10px;align-items:flex-start;border:1px solid #d5dbe5;border-radius:10px;padding:12px;cursor:pointer;background:#fff}.cb-pl:has(input:checked){border-color:var(--navy,#14284b);box-shadow:0 0 0 2px rgba(20,40,75,.15)}.cb-step1-form .cb-pl{display:flex!important;flex-direction:row!important;font-weight:400}.cb-step1-form .cb-pl>*{grid-column:auto}.cb-pl-b{flex:1 1 auto;min-width:0}.cb-pl input{width:18px!important;min-width:18px;height:18px;flex:0 0 18px;margin:3px 0 0;padding:0}.cb-pl-b{display:grid;grid-template-columns:1fr auto;gap:2px 8px;width:100%}.cb-pl-p{font-weight:700;text-align:right}.cb-pl-p s{opacity:.55;font-weight:400;margin-right:4px}.cb-pl-b small{grid-column:1/-1;opacity:.8}</style>
 </head>
 <body>
@@ -53,12 +53,13 @@
 <main id="main">
 <section class="hero rv-hero" id="top"><div class="wrap grid">
 <div>
-<p class="rv-eyebrow">AI receptionist for home-service pros</p>
+<p class="rv-eyebrow">Your AI Receptionist</p>
 <h1 id="cb-hero-h1">Catch every call.<br><span>Catch every job.</span></h1>
 <p class="lead" id="cb-hero-lead">Sami answers your business line 24/7, handles customer questions, flags emergencies and texts you the details, so you can stay on the job.</p>
 <div class="cb-sample" id="sample-call">
 <p class="cb-sample-h">Hear how Sami answers a customer call</p>
 <audio controls preload="metadata" data-sample-tag="hero" src="assets/sami-sample-call.mp3">Your browser does not support audio playback.</audio>
+<p class="cb-sample-cap">Example call with a pretend company. Sami is an AI receptionist; the caller is an AI voice.</p>
 <p class="cb-sample-cap">Recorded example of Sami, our AI receptionist: a homeowner calling a plumbing company about a leaking water heater.</p>
 </div>
 <div class="rv-cta">
@@ -68,7 +69,7 @@
 </div>
 <div class="phone hero-card rv-card" aria-label="Example call transcript">
 <div class="tag">Incoming call &middot; 2:14 AM</div>
-<div class="b s">Thanks for calling Liberty Plumbing, this is Sami. How can I help you today?</div>
+<div class="b s">Thanks for calling Sample Plumbing &amp; Heating, this is Sami. How can I help you today?</div>
 <div class="b">My basement's flooding, a pipe burst!</div>
 <div class="b s">I'm flagging this as an emergency and texting the on-call tech right now. What's the address?</div>
 <div class="tag">&#10003; Emergency texted to owner</div>
@@ -142,19 +143,20 @@ document.getElementById('c-out').innerHTML='Estimated value of those calls: <str
 <p class="note">Live demo of Sami, our AI receptionist, answering for a fictional plumbing company. Allow microphone access.</p>
 <div class="excall">
 <div class="phone" aria-label="Example call transcript">
+<p class="ex-label">Illustrative example</p>
 <div class="tag">Incoming call · 11:47 PM</div>
-<div class="b s">Thanks for calling Keystone Plumbing, this is Sami. This call may be recorded for quality. How can I help you today?</div>
+<div class="b s">Thanks for calling Sample Plumbing &amp; Heating, this is Sami. This call may be recorded for quality. How can I help you today?</div>
 <div class="b">A pipe just burst under my kitchen sink. There's water everywhere.</div>
 <div class="b s">I'm sorry, let's get help moving. If you can, turn off the main water shutoff, usually near where the water line enters the house. What's your name and address?</div>
-<div class="b">Dana Reyes, 214 Maple Ave, West Chester.</div>
-<div class="b s">Thanks, Dana. I'm flagging this as an emergency and texting the on-call plumber now. What's the best number for a callback?</div>
-<div class="b">610-555-0142.</div>
+<div class="b">a caller, 64 E Uwchlan Ave, Exton, PA.</div>
+<div class="b s">Thanks. I'm flagging this as an emergency and texting the on-call plumber now. What's the best number for a callback?</div>
+<div class="b">(555) 555-0100.</div>
 <div class="b s">Got it. I'll pass along your details so the business can follow up. Anything else I should pass along?</div>
 </div>
 <div class="sms" aria-label="Example owner text summary">
 <div class="tag">Text to the owner · 11:49 PM</div>
 <p><strong>🚨 EMERGENCY: burst pipe</strong></p>
-<p>Dana Reyes · 610-555-0142<br>214 Maple Ave, West Chester, PA</p>
+<p>a caller · (555) 555-0100<br>64 E Uwchlan Ave, Exton, PA</p>
 <p>Pipe burst under kitchen sink, active leak. Caller told how to shut off main water. Wants callback ASAP.</p>
 <p class="note">Reply or tap to call back. Full transcript in your email summary.</p>
 </div></div>
@@ -209,9 +211,9 @@ document.getElementById('c-out').innerHTML='Estimated value of those calls: <str
 <input type="hidden" name="_captcha" value="false">
 <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
 <label>Your Name *<input name="name" required autocomplete="name" placeholder="e.g., Mike Miller"></label>
-<label>Business Name *<input name="business_name" required autocomplete="organization" placeholder="e.g., Miller Plumbing & Heating"></label>
+<label>Business Name *<input name="business_name" required autocomplete="organization" placeholder="e.g., Sample Plumbing &amp; Heating"></label>
 <label>Mobile Phone (for call/text alerts) *<input name="phone" type="tel" required autocomplete="tel" placeholder="(610) 555-0147"></label>
-<label>Email Address *<input name="email" type="email" required autocomplete="email" placeholder="mike@millerplumbing.com"></label>
+<label>Email Address *<input name="email" type="email" required autocomplete="email" placeholder="owner@example.com"></label>
 <label class="full">Your Trade *<select name="trade" required><option value="">Choose…</option><option value="Plumbing">Plumbing</option><option value="HVAC">HVAC</option><option value="Electrical">Electrical</option><option value="Roofing">Roofing</option><option value="Landscaping">Landscaping</option><option value="General contracting">General contracting</option><option value="Cleaning / maid / janitorial">Cleaning / maid / janitorial</option><option value="Other home services">Other home services</option></select></label>
 <input type="hidden" name="plan" id="cb-plan-input" value="Pro — $99/mo (November Special · 400 min, 24/7)">
 <fieldset class="full cb-plans" aria-label="Choose your plan">
@@ -470,7 +472,7 @@ document.getElementById('c-out').innerHTML='Estimated value of those calls: <str
         <span>Callbassador Voice AI</span>
       </div>
       <h2 id="cb-vmodal-title">Sami AI Voice Demo (Live, in your browser)</h2>
-      <p class="cb-vmodal-sub">Liberty Plumbing Demo · Speak naturally into your microphone</p>
+      <p class="cb-vmodal-sub">Sample Plumbing &amp; Heating Demo · Speak naturally into your microphone</p>
     </div>
     <div class="cb-vmodal-body">
       <div class="cb-orb-stage" id="cb-orb-stage" data-state="idle" role="button" tabindex="0" aria-label="Toggle live voice call with Sami">
