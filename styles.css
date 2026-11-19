@@ -318,3 +318,49 @@ body.cb-modal-open #retell-widget-root,#cb-voice-modal.is-open~#retell-widget-ro
   .cb-step1-form .cb-terms label{font-size:.95rem!important;line-height:1.45!important}
   .cb-step1-form .cb-terms input[type="checkbox"]{width:22px!important;height:22px!important;padding:0!important;margin:2px 0 0!important}
 }
+
+.cb-plans[hidden]{display:none!important}
+.cb-hero-actions,.cb-demo-actions{display:flex;flex-direction:column;align-items:flex-start;gap:10px;margin:8px 0 0}
+.cb-call-sami{display:inline-flex;align-items:center;justify-content:center;text-align:center;background:#fff;color:#0A1A3F!important;border:2px solid #fff;border-radius:999px;padding:14px 22px;font-weight:800;text-decoration:none;line-height:1.25;box-shadow:0 8px 20px rgba(0,0,0,.18)}
+.cb-call-sami:hover{background:#f4f7ff;text-decoration:none}
+#example-call .cb-call-sami{background:var(--navy);color:#fff!important;border-color:var(--navy);box-shadow:none}
+.cb-call-note{margin:0;max-width:36rem;font-size:.82rem;line-height:1.45;color:#c9d2e8}
+#example-call .cb-call-note{color:var(--muted)}
+.cb-nocard{font-size:.92rem;font-weight:600;color:inherit;text-decoration:underline;text-underline-offset:3px}
+.cta .cb-nocard{flex-basis:100%}
+.rv-hero .cb-nocard{color:#dbe4f7}
+.card .cb-nocard,.price .cb-nocard{display:block;margin-top:10px;font-size:.84rem;color:var(--navy)}
+.cb-demo-modal[hidden]{display:none!important}
+.cb-demo-modal{position:fixed;inset:0;z-index:10000;display:flex;align-items:flex-end;justify-content:center;padding:12px}
+.cb-demo-backdrop{position:absolute;inset:0;background:rgba(10,26,63,.62)}
+.cb-demo-card{position:relative;z-index:1;width:min(520px,100%);max-height:calc(100vh - 24px);overflow:auto;background:#fff;color:var(--ink);border-radius:18px;padding:22px 20px 18px;box-shadow:0 24px 60px rgba(0,0,0,.35)}
+.cb-demo-card h2{margin:0 0 6px;color:var(--navy);font-size:1.45rem}
+.cb-demo-lead{margin:0 0 14px;color:var(--muted)}
+.cb-demo-close{position:absolute;top:10px;right:12px;border:0;background:transparent;font-size:1.6rem;line-height:1;cursor:pointer;color:var(--navy)}
+.cb-opt{font-weight:500;color:var(--muted)}
+.cb-demo-consent{font-size:.82rem;line-height:1.45;color:var(--muted);margin:4px 0 12px}
+.cb-nocard-thanks{background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46;border-radius:10px;padding:12px 14px;font-weight:700}
+@media(min-width:700px){.cb-demo-modal{align-items:center}}
+@media(max-width:820px){
+  .cb-call-sami,.cb-demo-actions .btn,.cb-hero-actions .btn{width:100%;text-align:center}
+  .cb-nocard{font-size:.95rem}
+}
+
+.cb-sms{display:flex;flex-wrap:wrap;align-items:flex-start;gap:10px 12px;background:#fff;color:#1b2333;border:1.5px solid #10275A;border-radius:10px;padding:12px 14px;margin:0}
+.cb-sms[hidden]{display:none!important}
+.cb-step1-form .cb-sms input[type="checkbox"],.cb-demo-card .cb-sms input[type="checkbox"]{appearance:auto;-webkit-appearance:checkbox;width:22px!important;height:22px!important;min-width:22px!important;max-width:22px!important;flex:0 0 22px;margin:2px 0 0!important;padding:0!important;border:1.5px solid #10275A;border-radius:4px;accent-color:#10275A;background:#fff;cursor:pointer;opacity:1;pointer-events:auto}
+.cb-sms label{display:block;flex:1 1 180px;margin:0;font-size:.92rem;font-weight:600;line-height:1.45;color:#1b2333;cursor:pointer}
+.cb-sms label a{color:#10275A;font-weight:700;text-decoration:underline}
+.cb-call-pair{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px;width:100%;max-width:680px;align-items:start}
+.cb-call-opt{display:flex;flex-direction:column;align-items:stretch;gap:6px;min-width:0}
+.cb-call-opt .btn{width:100%;text-align:center;white-space:normal}
+.cb-call-browser{display:inline-flex;align-items:center;justify-content:center;background:transparent;color:#fff!important;border:2px solid rgba(255,255,255,.9);border-radius:999px;padding:14px 16px;font-weight:800;text-decoration:none;line-height:1.25;box-shadow:none}
+.cb-call-browser:hover{background:rgba(255,255,255,.08);text-decoration:none}
+#example-call .cb-call-browser{background:#fff;color:var(--navy)!important;border-color:var(--navy)}
+#example-call .cb-call-browser:hover{background:#f4f7ff}
+.cb-browser-note{margin:0;font-size:.82rem;line-height:1.45;color:#c9d2e8}
+#example-call .cb-browser-note,#example-call .cb-call-note{color:var(--muted)}
+.cb-call-opt .cb-call-note{max-width:none}
+@media(max-width:700px){
+  .cb-call-pair{grid-template-columns:1fr}
+}

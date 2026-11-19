@@ -63,6 +63,7 @@
   window.cbTrack=ev;
   function meta(eventName, params, custom){
     try{
+      if(navigator.globalPrivacyControl===true)return;
       if(typeof window.fbq!=='function')return;
       if(custom){ window.fbq('trackCustom', eventName, params||{}); }
       else{ window.fbq('track', eventName, params||{}); }
